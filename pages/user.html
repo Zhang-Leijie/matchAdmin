@@ -2,25 +2,29 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">项目设计</span>
+			<span class="maintitle">选手信息</span>
 		</div>	
 		<div class="admin_ui_cont">
 			<table class="admin_ui_table">
 				<thead>
 					<tr>
-						<th>项目名称</th>
-						<th>分类</th>
-						<th>操作</th>
+						<th>名次</th>
+						<th>队伍名称</th>
+						<th>学校</th>
+						<th>总分</th>
+						<th>队伍信息</th>
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
-					<tr v-for="brand in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+					<tr>
 						<td></td>
-						<td>车易贷</td>
+						<td></td>
+						<td></td>
+						<td></td>
 						<td>
-							<a class="iconButton checkIcon">
+							<a href='#/userdetail.html' class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
-								编辑
+								查看
 							</a>
 							<div class="iconButton removeIcon">
 								<i class="fa fa-remove"></i>
@@ -38,11 +42,11 @@
 </div>
 <div class="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
-		<a href="#/additem.html" class="admin_ui_button admin_ui_button_green">
-			新增
+		<a class="admin_ui_button admin_ui_button_green">
+			导入信息
 		</a>
 		<a class="admin_ui_button admin_ui_button_white">
-			成绩列表
+			打印证书
 		</a>
 	</div>
 </div>
