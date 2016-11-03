@@ -133,48 +133,48 @@ function uiComponentEventBind(){
     });
     // 自动填充输入框 结束
     // 上传轮播图部分 开始
-    $.each($("[data-sildeImageBox]"),function(){
-        var $this = $(this);
-        var src = $this.attr("data-src");
-        if(src){
-            var image = '<img src="'+src+'" />';
-            $this.find(".slideImageUpload").append(image);
-        }
-        $this.find(".slideImageUpload").bind('click',function(){
-            var $slideImageUpload = $(this);
-            var $sildeImageBox = $this;
-            // 值为0时说明这个为传图片的盒子
-            if($(this).closest("[data-sildeImageBox]").attr("data-sildeImageBox")!=1){
-                var fileInput = document.createElement("input");
-                fileInput.type = "file";
-                fileInput.accept="image/*";
-                fileInput.click();
-                fileInput.addEventListener('change',function(event){
-                    if(this.files[0].type.match(/image\/\w*/)){
-                        var objectURL = window.URL.createObjectURL(this.files[0]);
-                        var _image = '<img src="'+objectURL+'" />';
-                        _image.onload = function(){
-                            window.URL.revokeObjectURL(this.src);
-                        };
-                        var $_sildeImageBox = $sildeImageBox.clone().attr({
-                            "data-src": objectURL,
-                            "data-id":0,
-                            "data-sildeImageBox": 1
-                        }).data({
-                            "file": this.files[0]
-                        });
-                        console.log(_image);
-                        $_sildeImageBox.find(".slideImageUpload").append(_image);
-                        $_sildeImageBox.insertBefore($this);
-                    }
-                    else{
-                        alert("请上传图片格式的文件");
-                    }
+    // $.each($("[data-sildeImageBox]"),function(){
+    //     var $this = $(this);
+    //     var src = $this.attr("data-src");
+    //     if(src){
+    //         var image = '<img src="'+src+'" />';
+    //         $this.find(".slideImageUpload").append(image);
+    //     }
+    //     $this.find(".slideImageUpload").bind('click',function(){
+    //         var $slideImageUpload = $(this);
+    //         var $sildeImageBox = $this;
+    //         // 值为0时说明这个为传图片的盒子
+    //         if($(this).closest("[data-sildeImageBox]").attr("data-sildeImageBox")!=1){
+    //             var fileInput = document.createElement("input");
+    //             fileInput.type = "file";
+    //             fileInput.accept="image/*";
+    //             fileInput.click();
+    //             fileInput.addEventListener('change',function(event){
+    //                 if(this.files[0].type.match(/image\/\w*/)){
+    //                     var objectURL = window.URL.createObjectURL(this.files[0]);
+    //                     var _image = '<img src="'+objectURL+'" />';
+    //                     _image.onload = function(){
+    //                         window.URL.revokeObjectURL(this.src);
+    //                     };
+    //                     var $_sildeImageBox = $sildeImageBox.clone().attr({
+    //                         "data-src": objectURL,
+    //                         "data-id":0,
+    //                         "data-sildeImageBox": 1
+    //                     }).data({
+    //                         "file": this.files[0]
+    //                     });
+    //                     console.log(_image);
+    //                     $_sildeImageBox.find(".slideImageUpload").append(_image);
+    //                     $_sildeImageBox.insertBefore($this);
+    //                 }
+    //                 else{
+    //                     alert("请上传图片格式的文件");
+    //                 }
                     
-                });
-            }
-        });
-    });
+    //             });
+    //         }
+    //     });
+    // });
     // 上传轮播图部分 结束
 
     // 搜索框

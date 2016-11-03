@@ -1,0 +1,48 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">项目发标</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>项目名称</th>
+						<th>分类</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="admin_ui_table_hoverEffect">
+					<tr v-for="brand in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
+						<td></td>
+						<td>车易贷</td>
+						<td>
+							<a class="iconButton checkIcon">
+								<i class="fa fa-pencil"></i>
+								编辑
+							</a>
+							<div class="iconButton removeIcon">
+								<i class="fa fa-remove"></i>
+								删除
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed">
+	<div class="admin_ui_button_group" style="float: right">
+		<a href="#/additem.html" class="admin_ui_button admin_ui_button_green">
+			新增
+		</a>
+		<a class="admin_ui_button admin_ui_button_white">
+			成绩列表
+		</a>
+	</div>
+</div>

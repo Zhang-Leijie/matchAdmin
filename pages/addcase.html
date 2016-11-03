@@ -1,0 +1,82 @@
+<div id="admin_content_template" class="admin_content_template">
+	<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+		<div class="admin_scrollBox">
+			<div class="admin_ui_header">
+				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+				<span class="maintitle">新增案例分析</span>
+			</div>
+			<div class="admin_ui_cont">
+				<div class="admin_ui_border admin_ui_cont">
+					<table class="admin_ui_table_split_half">
+						<tbody>
+							<tr>
+								<td>
+									<div class="admin_ui_form_field">
+										<div class="admin_ui_name">项目名称</div>
+										<input type="text" class="admin_ui_input">
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="admin_ui_form_field">
+										<div class="admin_ui_name">背景描述</div>
+										<textarea id="tinymce"></textarea>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a href="#/case.html" class="admin_ui_button admin_ui_button_white">
+				返回
+			</a>
+			<div class="admin_ui_button admin_ui_button_green editBrandButton">
+				新增
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+var editor =  new tinymce.Editor('tinymce', {
+height: 300,
+theme: 'modern',
+language: 'zh_CN',
+plugins: [
+    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+    'searchreplace wordcount visualblocks visualchars code fullscreen',
+    'insertdatetime media nonbreaking save table contextmenu directionality',
+    'emoticons template paste textcolor colorpicker textpattern imagetools'
+],
+toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+toolbar2: 'print preview media | forecolor backcolor | example',
+setup: function(ed) {
+  	
+},
+fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
+image_advtab: true,
+image_upload: true,
+relative_url: false,
+templates: [
+    { title: 'Test template 1', content: 'Test 1' },
+    { title: 'Test template 2', content: 'Test 2' }
+],
+content_css: [
+    '../source/css/tinymce.css'
+]
+}, tinymce.EditorManager);
+editor.render();
+</script>
+
+
+
+
+
+
+
+
