@@ -1,0 +1,98 @@
+<div class="admin_content_innerBox" id="point_infos">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_cont" style="padding-bottom: 70px;">
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th v-for="prop in props">{{prop | cn}}</th>
+					</tr>
+				</thead>
+				<tbody id="userManagement_userData" class="admin_ui_table_hoverEffect">
+					<tr v-for="item in list">
+						<td v-for="prop in props">{{item[prop] | normalize prop}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed" id="point_manipulate">
+	<div class="admin_ui_button_group" style="float: right">
+		<a class="admin_ui_button admin_ui_button_white" :href="href">
+			{{name}}
+		</a>
+	</div>
+</div>
+<script>
+	var dict = {
+		'id': '编号',
+		'school_name': '学校',
+		'account': '队伍名称',
+		'objectscore': '得分'
+	}
+
+	var scorelookup = {
+		objective: {
+			url: '/MatchAdmin/index/ObjectScoreList',
+			back: '#/objective.html',
+			name: '客观题'
+		}
+	}
+
+	new Vue({
+		el: '#point_infos',
+		data: function(){
+			return {
+				list: [],
+				props: []
+			}
+		},
+		ready: function(){
+			var self = this
+			var type = getQueryVariable('type')
+			ajaxP(scorelookup[type].url).then(function(res){
+				self.list = res
+				var item = res[0] || {}
+				self.props = Object.keys(item)
+			})
+		},
+		filters: {
+			cn: function(str){
+				return dict[str]
+			},
+			normalize: function(str, prop) {
+				if (str) {
+					return str
+				}
+				if (prop == 'objectscore') {
+					return '未完成'
+				}
+			}
+		}
+	})
+
+	new Vue({
+		el: '#point_manipulate',
+		data: function(){
+			return {
+				href: "",
+				name: ""
+			}
+		},
+		ready: function(){
+			var type = getQueryVariable('type')
+			this.href = scorelookup[type].back
+			this.name = scorelookup[type].name
+		}
+	})
+
+	function getQueryVariable(variable) {
+		var query = window.location.hash
+		var vars = query.split("?").pop().split('&')
+		for (var i=0;i<vars.length;i++) {
+			var pair = vars[i].split("=");
+			if(pair[0] == variable){return pair[1];}
+		}
+		return(false);
+	}
+</script>

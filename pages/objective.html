@@ -1,31 +1,68 @@
+<style>
+	.question{
+		width: 150px;
+		height: 80px;
+		border: 1px solid #ddd;
+		cursor: pointer;
+		text-align: center;
+		line-height: 40px;
+		font-size: 18px;
+		float: left;
+	}
+
+	.question + .question {
+		margin-left: 20px;
+	}
+
+	.question.active {
+		background: whitesmoke;
+	}
+</style>
 <div class="admin_content_innerBox" id="object_infos">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-users fa-2x admin_ui_mainColor"></i>
 			<span class="maintitle">客观题</span>
 		</div>	
-		<div class="admin_ui_cont">
-			<div class="question">
-				<div>单选题</div>
-				<div>总数:{{single.length}}</div>
+		<div class="admin_ui_cont" style="padding-bottom: 70px;">
+			<div class="clearfix" style="margin-bottom:20px;">
+				<div class="question" :class="{'active': select=='single'}" @click="select='single'">
+					<div>单选题</div>
+					<div>总数:{{single.length}}</div>
+				</div>
+				<div class="question" :class="{'active': select=='multi'}" @click="select='multi'">
+					<div>多选题</div>
+					<div>总数:{{multi.length}}</div>
+				</div>
+				<div class="question" :class="{'active': select=='judge'}" @click="select='judge'">
+					<div>判断题</div>
+					<div>总数:{{judge.length}}</div>
+				</div>
 			</div>
-			<div class="question">
-				<div>多选题</div>
-				<div>总数:{{multi.length}}</div>
-			</div>
-			<div class="question">
-				<div>判断题</div>
-				<div>总数:{{judge.length}}</div>
-			</div>
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th style="width:100px;">序号</th>	
+						<th>题干</th>
+					</tr>
+				</thead>
+				<tbody id="userManagement_userData" class="admin_ui_table_hoverEffect">
+					<tr v-for="item in selectList(select)">
+						<td>{{$index+1}}</td>
+						<td>{{item.branch}}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
 <div class="admin_ui_cont_bottomFixed" id="objective_manipulate">
 	<div class="admin_ui_button_group" style="float: right">
-		<a href="#/addraise.html" class="admin_ui_button admin_ui_button_green">
+		<input id="objective_import" type="file" style="display:none;" @change="import">
+		<label for="objective_import" class="admin_ui_button admin_ui_button_green" @click="confirm">
 			导入题库
-		</a>
-		<a class="admin_ui_button admin_ui_button_white">
+		</label>
+		<a class="admin_ui_button admin_ui_button_white" href="#/points.html?type=objective">
 			成绩列表
 		</a>
 	</div>
@@ -37,12 +74,19 @@
 			return {
 				single: [],
 				multi: [],
-				judge: []
+				judge: [],
+				select: "single"
+			}
+		},
+		methods: {
+			selectList: function(select){
+				return this[select]
 			}
 		},
 		ready: function(){
 			var self = this
-			ajaxP('/MatchAdmin/index/ObjectList').then(function(list){
+			ajaxP('/MatchAdmin/index/ObjectList').then(function(res){
+				var list = res.objectlist
 				list.forEach(function(item){
 					if (item.type == '单选') {
 						self.single.push(item)
@@ -63,20 +107,31 @@
 				
 			}
 		},
+		methods: {
+			confirm: function(event){
+				if(confirm('最新导入题库将覆盖原有题库')) {
+					return true
+				} else {
+					event.preventDefault()
+				}
+			},
+			import: function(e){
+				var formData = new FormData()
+				formData.append('file_stu', e.target.files[0])
+				ajaxP('/MatchAdmin/index/QustionImport', formData, {
+					//multipart/form-data
+					type: "POST",
+					processData: false,
+					contentType: false,
+					cache: false
+				}).then(function(res){
+					window.location.reload()
+				}).catch(function(e){
+					alert('导入失败' + (e.message ? ': ' + e.message : ""))
+				})
+			}
+		},
 		ready: function(){
-			
 		}
 	})
 </script>
-<style>
-	.question{
-		width: 150px;
-		height: 80px;
-		border: 1px solid #ddd;
-		text-align: center;
-		line-height: 40px;
-		font-size: 18px;
-		float: left;
-		margin-left: 20px;
-	}
-</style>
