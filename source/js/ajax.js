@@ -8,10 +8,14 @@ var retCodes = {
 const LOGIN_ERROR = "LOGIN_ERROR_0"
 var hasNonLoginError = false
 
-var ajaxP = function(url){
-	return Promise.resolve($.ajax({
+var ajaxP = function(url, params){
+	var options = {
 		url: url
-	})).then(function(res){
+	}
+	if (params) {
+		options.data = params
+	}
+	return Promise.resolve($.ajax(options)).then(function(res){
 		if (res.state == retCodes.success) {
 			hasNonLoginError = false
 			return Promise.resolve(res.order)

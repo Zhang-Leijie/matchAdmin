@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../source/css/sign_in.css">
     <script src="../source/js/jquery-1.11.1.min.js"></script>
 	<script src="../source/js/ajax.js"></script>
+	<script src="../source/js/vue.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -17,41 +18,42 @@
 			<span>互联网大赛端后台管理系统</span></a>
 		</div>
 	</div>
-	<div class="controls" style="height:300px;">
+	<div class="controls" style="height:300px;" id="sign_in_vue">
 		<div class="caret"></div>
 		<div class="form-wrapper">
 			<h1>登录</h1>
 			<div class="gd">
-				<input type="text" class="denglu" placeholder="用户名" id="mail">
+				<input type="text" class="denglu" placeholder="用户名" id="mail" v-model="mail">
 				<i class="fa fa-user user" ></i>
 			</div>
 			<div class="gd">
-				<input type="password" class="denglu" placeholder="密码" id="pass">
+				<input type="password" class="denglu" placeholder="密码" id="pass" v-model="pass">
 				<i class="fa fa-lock user" ></i>
 			</div>
 			
-			<a id="loginButton" class="btn" style="cursor:pointer">登录</a>
+			<a id="loginButton" class="btn" style="cursor:pointer" @click="sign_in">登录</a>
 			
 		</div>
 	</div>
 <script>
-$("#loginButton").bind("click",function(){
-	var mail = $.trim($("#mail").val()), pass = $.trim($("#pass").val());
-	if(!mail){
-		alert("请输入用户名!");
-	}
-	else if(!pass){
-		alert("请输入密码");
-	}
-	else {
-		// $.when(loginApi(mail,pass)).done(function (data) {
-		// 	if (data.state == 0) {
-				window.location.href = "index.html";
-		// 	}
-		// 	else{
-				
-		// 	}
-		// })
+new Vue({
+	el: '#sign_in_vue',
+	data: function(){
+		return{
+			mail:'',
+			pass:''
+		}
+	},
+	methods: {
+	    sign_in:function(){
+	    	var self = this
+	    	ajaxP('/MatchAdmin/log/Login',{
+	    		'account':self.mail,
+	    		'password':self.pass
+	    	}).then(function(){
+				window.location = 'index.html'
+			})
+	    }
 	}
 })
 
