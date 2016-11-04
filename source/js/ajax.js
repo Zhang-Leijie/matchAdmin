@@ -34,7 +34,7 @@ var ajaxP = function(url, params){
 		        return
 		    }
 		    alert('处于未登录状态, 请登录')
-		    window.location.hash = 'sign_in.html'
+		    window.location = 'sign_in.html'
 		}
 		return Promise.reject(e)
 	})
