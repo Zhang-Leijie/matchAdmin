@@ -6,20 +6,20 @@
 				<span class="maintitle">选手信息详情</span>
 			</div>
 			<div class="admin_ui_cont">
-				<div class="userdetail">队伍名称：</div>
-				<div class="userdetail">学校信息：</div>
-				<div class="userdetail">队伍成员：</div>
-				<div class="userdetail">比赛名次：</div>
-				<div class="userdetail">指导老师：</div>
+				<div class="userdetail">队伍名称：{{info.account}}</div>
+				<div class="userdetail">学校信息：{{info.school_name}}</div>
+				<div class="userdetail">队伍成员：<span v-for="member in info.members" style="margin-right:20px;">{{member}}</span></div>
+				<div class="userdetail">比赛名次：{{posi}}</div>
+				<div class="userdetail">指导老师：{{info.teacher}}</div>
 				<div class="userdetail">比赛成绩：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;客观题：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;投标操作：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;项目发标：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;审标操作：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;案例分析：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;公益设计：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;项目设计：</div>
-				<div class="userdetail">&nbsp;&nbsp;&nbsp;总分：</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;客观题：{{info.ObjectsScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;项目发标：{{info.PeerDesignScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;投标操作：{{info.PeerInvestScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;审标操作：{{info.PeerVerifyScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;案例分析：{{info.AnalysisScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;公益设计：{{info.CrowdfundingcDesignScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;项目设计：{{info.CrowdfundingsDesignScore}}</div>
+				<div class="userdetail">&nbsp;&nbsp;&nbsp;总分：{{info.totalscore}}</div>
 			</div>
 		</div>
 	</div>
@@ -36,3 +36,27 @@
 		line-height: 40px;
 	}
 </style>
+<script>
+var  v = window.location.hash.split('&')
+var	 id = v[0].split('=')[1]
+var  pos = v[1].split('=')[1]
+console.log(id)
+new Vue({
+	el: '#admin_content_template',
+	data: function(){
+		return{
+			info:'',
+			posi:''
+		}
+	},
+	ready: function(){
+		var self = this
+		self.posi = pos-0+1
+		ajaxP('/MatchAdmin/index/UserDetail',{
+			'id':id
+		}).then(function(data){
+			self.info = data
+		})
+	}
+})	
+</script>

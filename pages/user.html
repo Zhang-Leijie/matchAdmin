@@ -16,13 +16,13 @@
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+					<tr v-for="list in lists">
+						<td>{{$index+1}}</td>
+						<td>{{list.account}}</td>
+						<td>{{list.school_name}}</td>
+						<td>{{list.totalscore}}</td>
 						<td>
-							<a href='#/userdetail.html' class="iconButton checkIcon">
+							<a :href="'#/userdetail.html?id='+list.id+'&pos='+$index" class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
 								查看
 							</a>
@@ -35,7 +35,7 @@
 				</tbody>
 			</table>
 			<div class="admin_ui_pagination">
-				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+				<!-- <div class="M-box pc" v-show="dataSource_filter.length>0"></div> -->
 			</div>
 		</div>
 	</div>
@@ -50,3 +50,19 @@
 		</a>
 	</div>
 </div>
+<script>
+new Vue({
+	el: '#admin_content_innerBox',
+	data: function(){
+		return{
+			lists:[]
+		}
+	},
+	ready: function(){
+		var self = this
+		ajaxP('/MatchAdmin/index/UserInfo').then(function(data){
+			self.lists = data
+		})
+	}
+})
+</script>

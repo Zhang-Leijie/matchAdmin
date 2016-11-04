@@ -43,10 +43,10 @@
             <div class="xiala"><i class="fa fa-sort-desc" style="color:white"></i></div>
         </div>
         <div id="admin_ui_dropdown_menu" class="admin_ui_dropdown_menu" data-hideWhenBlur>
-            <a href="#/adminAccount.html">
+            <!-- <a href="#/adminAccount.html">
                 <i class="fa fa-cogs"></i>&nbsp;账号管理
-            </a>
-            <a id="logoutButton">
+            </a> -->
+            <a id="logoutButton" @click="sign_out">
                 <i class="fa fa-sign-out"></i>&nbsp;退出登录
             </a>
         </div>
@@ -130,13 +130,21 @@
     <div id="admin_content" class="admin_content"></div>
 </div>
 <script>
-    $("#logoutButton").bind('click',function(){
-        $.when(logoutApi()).done(function(data){
-            if(data.state == 0){
-                window.location.href="sign_in.html";
+    new Vue({
+        el: '#admin_body',
+        data: function(){
+            return{}
+        },
+        methods: {
+            sign_out:function(){
+                var self = this
+                ajaxP('/MatchAdmin/log/Logout',{
+                }).then(function(){
+                    window.location = 'sign_in.html'
+                })
             }
-        })
-    });
+        }
+    })
 </script>
 </body>
 </html>
