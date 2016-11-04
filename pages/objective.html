@@ -1,4 +1,4 @@
-<div class="admin_content_innerBox" id="admin_content_innerBox">
+<div class="admin_content_innerBox" id="object_infos">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-users fa-2x admin_ui_mainColor"></i>
@@ -7,20 +7,20 @@
 		<div class="admin_ui_cont">
 			<div class="question">
 				<div>单选题</div>
-				<div>总数:</div>
+				<div>总数:{{single.length}}</div>
 			</div>
 			<div class="question">
 				<div>多选题</div>
-				<div>总数:</div>
+				<div>总数:{{multi.length}}</div>
 			</div>
 			<div class="question">
 				<div>判断题</div>
-				<div>总数:</div>
+				<div>总数:{{judge.length}}</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="admin_ui_cont_bottomFixed">
+<div class="admin_ui_cont_bottomFixed" id="objective_manipulate">
 	<div class="admin_ui_button_group" style="float: right">
 		<a href="#/addraise.html" class="admin_ui_button admin_ui_button_green">
 			导入题库
@@ -30,7 +30,45 @@
 		</a>
 	</div>
 </div>
-<style lang="less">
+<script>
+	new Vue({
+		el: '#object_infos',
+		data: function(){
+			return {
+				single: [],
+				multi: [],
+				judge: []
+			}
+		},
+		ready: function(){
+			var self = this
+			/*ajaxP('/MatchAdmin/index/ObjectList').then(function(list){
+				list.forEach(function(item){
+					if (item.type == '单选') {
+						self.single.push(item)
+					} else if (item.type == '多选') {
+						self.multi.push(item)
+					} else if (item.type == '判断') {
+						self.judge.push(item)
+					}
+				})	
+			})*/
+		}
+	})
+
+	new Vue({
+		el: '#objective_manipulate',
+		data: function(){
+			return {
+				
+			}
+		},
+		ready: function(){
+			
+		}
+	})
+</script>
+<style>
 	.question{
 		width: 150px;
 		height: 80px;
