@@ -164,14 +164,13 @@
                     if (state.uploading) {
                         alert('请等待现有一张图片上传')
                         return
-                    } else {
-                        state.uploading = true
                     }
                     $img.click()
                     $img.unbind('change')
                     $img.on('change', function(e){
                         var file = e.target.files[0]
                         var formData = new FormData()
+                        state.uploading = true
                         formData.append('file', file)
                         Promise.resolve($.ajax({
                             url: '/home/asist/photo_upload',
