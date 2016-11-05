@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="../source/css/classic.css">
     <link rel="stylesheet" type="text/css" href="../source/css/classic.date.css">
     <link rel="stylesheet" type="text/css" href="../source/plunges/fontAwesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../source/plunges/zTree/css/awesomeStyle/awesome.css">
 
     <link rel="stylesheet" type="text/css" href="../source/css/reset.css">
     <link rel="stylesheet" type="text/css" href="../source/css/ui.css">
@@ -24,10 +23,6 @@
     <script src="../source/js/public.js"></script>
 
     <script src="../source/plunges/tinymce/tinymce.js"></script>
-    <script src="../source/plunges/zTree/js/jquery.ztree.all.min.js"></script>
-    <script src="../source/plunges/ueditor/ueditor.config.js"></script>
-    <script src="../source/plunges/ueditor/ueditor.all.min.js"> </script>
-    <script src="../source/plunges/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script src="../source/js/jquery.pagination.min.js"></script>
 </head>
 <body>
@@ -145,6 +140,57 @@
             }
         }
     })
+
+    function getQueryVariable(variable) {
+        var query = window.location.hash
+        var vars = query.split("?").pop().split('&')
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
+    function uploadFactory(imgId) {
+        var state = {
+            uploading: false
+        }
+        return {
+            state: state,
+            callback: function(field_name, url, type, win) {
+                if(type=='image') {
+                    $('#' + field_name).attr('placeholder', '上传中...')
+                    var $img = $('#' + imgId)
+                    if (state.uploading) {
+                        alert('请等待现有一张图片上传')
+                        return
+                    } else {
+                        state.uploading = true
+                    }
+                    $img.click()
+                    $img.unbind('change')
+                    $img.on('change', function(e){
+                        var file = e.target.files[0]
+                        var formData = new FormData()
+                        formData.append('file', file)
+                        Promise.resolve($.ajax({
+                            url: '/home/asist/photo_upload',
+                            data: formData,
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            cache: false
+                        })).then(function(res){
+                            res = JSON.parse(res)
+                            $('#' + field_name).val(res.order[0].file)
+                            $('#' + field_name).attr('placeholder', '')
+                           state.uploading = false
+                        })
+                    })
+                }
+            } 
+        }
+    }
 </script>
 </body>
 </html>
