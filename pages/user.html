@@ -1,10 +1,10 @@
-<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="user_content">
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" >
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
 			<span class="maintitle">选手信息</span>
 		</div>	
-		<div class="admin_ui_cont">
+		<div class="admin_ui_cont" id="user_content">
 			<table class="admin_ui_table">
 				<thead>
 					<tr>
@@ -40,11 +40,12 @@
 		</div>
 	</div>
 </div>
-<div class="admin_ui_cont_bottomFixed">
+<div class="admin_ui_cont_bottomFixed" id="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
-		<a class="admin_ui_button admin_ui_button_green">
+		<input id="objective_import" type="file" style="display:none;" @change="import">
+		<label for="objective_import" class="admin_ui_button admin_ui_button_green" @click="confirm">
 			导入信息
-		</a>
+		</label>
 		<a class="admin_ui_button admin_ui_button_white">
 			打印证书
 		</a>
@@ -63,6 +64,40 @@ new Vue({
 		ajaxP('/MatchAdmin/index/UserInfo').then(function(data){
 			self.lists = data
 		})
+	}
+})
+new Vue({
+	el: '#admin_ui_cont_bottomFixed',
+	data: function(){
+		return {
+			
+		}
+	},
+	methods: {
+		confirm: function(event){
+			if(confirm('最新导入信息将覆盖原有信息')) {
+				return true
+			} else {
+				event.preventDefault()
+			}
+		},
+		import: function(e){
+			var formData = new FormData()
+			formData.append('file_stu', e.target.files[0])
+			ajaxP('/MatchAdmin/index/AccountImport', formData, {
+				//multipart/form-data
+				type: "POST",
+				processData: false,
+				contentType: false,
+				cache: false
+			}).then(function(res){
+				// window.location.reload()
+			}).catch(function(e){
+				alert('导入失败' + (e.message ? ': ' + e.message : ""))
+			})
+		}
+	},
+	ready: function(){
 	}
 })
 </script>

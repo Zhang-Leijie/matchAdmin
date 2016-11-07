@@ -5,7 +5,7 @@
 				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
 				<span class="maintitle">创业新天地</span>
 			</div>
-			<div class="admin_ui_cont">
+			<div class="admin_ui_cont" id="newWorldchange">
 				<div class="admin_ui_border admin_ui_cont">
 					<table class="admin_ui_table_split_half">
 						<tbody>
@@ -17,32 +17,38 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									<div class="admin_ui_form_field">
-										<div class="admin_ui_name">项目图片</div>
-										<label class="admin_ui_slideImageBox" data-sildeImageBox="0" data-src="" for="itemimage">
-											<div class="slideImageUpload">
-												<p class="tip">
-													<i class="fa fa-cloud-upload"></i>
-													点击上传图片
-												</p>
-											</div>
-										</labei>
-										<input type="file" style="display:none" id="itemimage">
-									</div>
-								</td>
-							</tr>
 						</tbody>
 					</table>
+					<div class="admin_ui_form_field">
+						<div class="admin_ui_name">项目图片</div>
+						<div v-for="pho in info.photo" track-by="$index">
+							<div class="admin_ui_slideImageBox" data-sildeImageBox="0" data-src="">
+								<div class="slideImageUpload">
+									<img style="width:100%;height:100%;" :src="pho" alt=""/>
+								</div>
+								<div class="admin_ui_button admin_ui_button_red deleteButton" style="display:block">删除</div>
+							</div>
+						</div>
+						<div>
+							<label class="admin_ui_slideImageBox" id="admin_ui_slideImageBox" data-sildeImageBox="0" data-src="" for="itemimage">
+								<div class="slideImageUpload">
+									<p class="tip">
+										<i class="fa fa-cloud-upload"></i>
+										点击上传图片
+									</p>
+								</div>
+							</label>
+							<input type="file" style="display:none" id="itemimage">
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="admin_ui_cont_bottomFixed">
 		<div class="admin_ui_button_group" style="float: right">
-			<div class="admin_ui_button admin_ui_button_green editBrandButton">
-				新增
+			<div class="admin_ui_button admin_ui_button_green editBrandButton" @click="saveData">
+				保存
 			</div>
 			<a class="admin_ui_button admin_ui_button_white">
 				成绩列表
@@ -50,64 +56,93 @@
 		</div>
 	</div>
 </div>
+<input name="file" type="file" id="img_upload" style="display:none;">
 <script>
-var editor =  new tinymce.Editor('tinymce', {
-height: 300,
-theme: 'modern',
-language: 'zh_CN',
-plugins: [
-    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-    'searchreplace wordcount visualblocks visualchars code fullscreen',
-    'insertdatetime media nonbreaking save table contextmenu directionality',
-    'emoticons template paste textcolor colorpicker textpattern imagetools'
-],
-toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-toolbar2: 'print preview media | forecolor backcolor | example',
-setup: function(ed) {
-  	
-},
-fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
-image_advtab: true,
-image_upload: true,
-relative_url: false,
-templates: [
-    { title: 'Test template 1', content: 'Test 1' },
-    { title: 'Test template 2', content: 'Test 2' }
-],
-content_css: [
-    '../source/css/tinymce.css'
-]
-}, tinymce.EditorManager);
+var ret = uploadFactory('img_upload')
 
-editor.render();
+var editor = new tinymce.Editor('tinymce', {
+	selector: '#tinymce',
+	language: 'zh_CN',
+	plugins: ['image'],
+	file_browser_callback: ret.callback,
+	height: 400
+}, tinymce.EditorManager)
+
+editor.render()
+
+new Vue({
+	el: '#admin_content_template',
+	data: function(){
+		return {
+			'info':{}
+		}
+	},
+	methods: {
+        saveData:function(){
+            var self = this
+            ajaxP('/MatchAdmin/index/FieldModify',{
+            }).then(function(){
+                window.location = 'sign_in.html'
+            })
+        }
+    }
+	ready: function(){
+		var self = this
+		ajaxP('/MatchAdmin/index/Field', {
+		}).then(function(res){
+			editor.setContent(unescapeHTML(res.text))
+			self.info = res
+		})
+	}
+})
 
 function img1(infile,outfile){
-		var result = $(outfile)[0]; 
-		var input = $(infile)[0];
-		if(typeof FileReader==='undefined'){ 
-		    result.innerHTML = "抱歉，你的浏览器不支持 FileReader"; 
-		    input.setAttribute('disabled','disabled');
-		}
-		else{ 
-			input.addEventListener('change',readFile,false);
-		}
-		var imagefile;
-		function readFile(){ 
-		    var file = this.files[0]; 
-		    if(!/image\/\w+/.test(file.type)){ 
-		        alert("文件必须为图片！"); 
-		        return false; 
-		    } 
-		    var reader = new FileReader(); 
-		    reader.readAsDataURL(file);
-		    reader.onload = function(e){ 
-		        result.innerHTML = '<img style="width:100%;height:100%;" src="'+this.result+'" alt=""/>';
-		        imagefile = this.result.split(',')[1];
-		    }
-		}
+	var result = $(outfile)[0]; 
+	var input = $(infile)[0];
+	if(typeof FileReader==='undefined'){ 
+	    result.innerHTML = "抱歉，你的浏览器不支持 FileReader"; 
+	    input.setAttribute('disabled','disabled');
+	}
+	else{ 
+		input.addEventListener('change',readFile,false);
+	}
+	var imagefile;
+	function readFile(){ 
+	    var file = this.files[0]; 
+	    if(!/image\/\w+/.test(file.type)){ 
+	        alert("文件必须为图片！"); 
+	        return false; 
+	    } 
+	    var formData = new FormData();
+	    formData.append('file', file);
+	    // var reader = new FileReader(); 
+	    // reader.readAsDataURL(file);
+	    // reader.onload = function(e){ 
+	    //     result.innerHTML = '<img style="width:100%;height:100%;" src="'+this.result+'" alt=""/>';
+	    //     imagefile = this.result.split(',')[1];
+	    // }
+	    Promise.resolve($.ajax({
+            url: '/home/asist/photo_upload',
+            data: formData,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            cache: false
+        })).then(function(res){
+            res = JSON.parse(res)
+            result.innerHTML = '<img style="width:100%;height:100%;" src="'+res.order[0].file+'" alt=""/>';
+        })
+	}
 }
-$(".admin_ui_slideImageBox").mouseenter(function(event) {
+$('#itemimage').on('click', function(event) {
 	img1("#itemimage",".slideImageUpload");
+	$('#itemimage').unbind('click')
+});
+$('#newWorldchange').on('click', '.admin_ui_button', function(event) {
+	if (confirm('确定删除图片')) {
+		$(this).parents('.admin_ui_slideImageBox').remove();
+
+	}
 });
 </script>
 

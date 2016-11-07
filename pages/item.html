@@ -5,7 +5,7 @@
 			<span class="maintitle">项目设计</span>
 		</div>	
 		<div class="admin_ui_cont">
-			<table class="admin_ui_table">
+			<table class="admin_ui_table" id="crowdfund_raise">
 				<thead>
 					<tr>
 						<th>项目名称</th>
@@ -14,15 +14,15 @@
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
-					<tr v-for="brand in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
-						<td></td>
-						<td>车易贷</td>
+					<tr v-for="list in lists">
+						<td>{{list.name}}</td>
+						<td>{{list.tag}}</td>
 						<td>
 							<a class="iconButton checkIcon">
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
-							<div class="iconButton removeIcon">
+							<div class="iconButton removeIcon" @click="delete(list.id)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -46,3 +46,40 @@
 		</a>
 	</div>
 </div>
+<script>
+	new Vue({
+		el: "#crowdfund_raise",
+		data: function(){
+			return {
+				lists: []
+			}
+		},
+		methods: {
+            delete:function(id){
+                var self = this
+                if(confirm('确认删除项目')) {
+					ajaxP('/MatchAdmin/Index/ProDelete',{
+	                	"id":id,
+	                	"type":2
+	                }).then(function(){
+	                   	ajaxP('/MatchAdmin/Index/Lists', {
+							type: 2
+						}).then(function(res){
+							self.lists = res
+						})
+	                })
+				} else {
+					event.preventDefault()
+				}              
+            }
+        },
+		ready: function(){
+			var self = this
+			ajaxP('/MatchAdmin/Index/Lists', {
+				type: 2
+			}).then(function(res){
+				self.lists = res
+			})
+		}
+	})
+</script>
