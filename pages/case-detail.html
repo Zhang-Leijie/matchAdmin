@@ -1,0 +1,122 @@
+<div id="case_detail_page">
+	<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+		<div class="admin_scrollBox">
+			<div class="admin_ui_header">
+				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+				<span class="maintitle">案例详情{{title}}</span>
+			</div>	
+			<div class="admin_ui_cont">
+				<div class="admin_ui_border admin_ui_cont">
+				    <table class="admin_ui_table_split_half">
+				        <tbody>
+				            <tr>
+				                <td>
+				                    <div class="admin_ui_form_field">
+				                        <div class="admin_ui_name">项目名称</div>
+				                        <input type="text" class="admin_ui_input" v-model="name">
+				                    </div>
+				                </td>
+				            </tr>
+				            <tr>
+				                <td>
+				                    <div class="admin_ui_form_field">
+				                        <div class="admin_ui_name">详细信息</div>
+				                        <textarea id="project_detail"></textarea>
+				                    </div>
+				                </td>
+				            </tr>
+				        </tbody>
+				    </table>
+				</div>
+			</div>
+		</div>
+		<input name="file" type="file" id="img_upload" style="display:none;">
+	</div>
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a @click="save" class="admin_ui_button admin_ui_button_green">
+				保存
+			</a>
+			<a href="#/case.html" class="admin_ui_button admin_ui_button_white">
+				案例分析
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	var ret = uploadFactory('img_upload')
+
+	new Vue({
+		el: '#case_detail_page',
+		data: function(){
+			return {
+				id: "-1",
+				name: ""
+			}
+		},
+		methods: {
+			save: function(){
+				if (this.id == '') {
+					if (!confirm('确定新增项目?')) {
+						return
+					}
+					ajaxP('/MatchAdmin/index/AnalysisProModify', {
+						name: this.name,
+						text: this.editor.getContent()
+					}).then(function(res){
+						window.location = '#/case.html'
+					}).catch(function(e){
+						alert('新增失败' + (e.message ? ', 原因:' + e.message : ""))
+					})
+				} else {
+					if (!confirm('确定修改项目?')) {
+						return
+					}
+					ajaxP('/MatchAdmin/index/AnalysisProModify', {
+						id: this.id,
+						name: this.name,
+						text: this.editor.getContent()
+					}).then(function(res){
+						window.location = '#/case.html'
+					}).catch(function(e){
+						alert('保存失败' + (e.message ? ', 原因:' + e.message : ""))
+					})
+				}
+			}
+		},
+		computed: {
+			title: function(){
+				var id = this.id
+				if (id === "-1") { return "" } else if (id === '') { return " - 新增" } else { return " - 修改"}
+			}
+		},
+		ready: function(){
+			var $vm = this 
+			var id = getQueryVariable('id')
+
+			var editor = new tinymce.Editor('project_detail', {
+				selector: '#project_detail',
+				language: 'zh_CN',
+				plugins: ['image'],
+				file_browser_callback: ret.callback,
+				height: 400
+			}, tinymce.EditorManager)
+			
+			editor.render()
+
+			this.editor = editor
+
+			if (id === false) {
+				this.id = ""
+			} else {
+				this.id = id 
+				ajaxP('/MatchAdmin/index/AnalysisInfo', {
+					id: id
+				}).then(function(res){
+					$vm.name = res.name
+					$vm.editor.setContent(unescapeHTML(res.text))
+				})
+			}
+		}
+	})
+</script>

@@ -1,4 +1,4 @@
-<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="case_page">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
@@ -13,14 +13,14 @@
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
-					<tr>
-						<td>考试内容模拟</td>
+					<tr v-for="item in list">
+						<td>{{item.name}}</td>
 						<td>
-							<a class="iconButton checkIcon">
+							<a class="iconButton checkIcon" :href="'#/case-detail.html?id=' + item.id">
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
-							<div class="iconButton removeIcon">
+							<div class="iconButton removeIcon" @click="removeItem($index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -28,15 +28,12 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="admin_ui_pagination">
-				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
-			</div>
 		</div>
 	</div>
 </div>
 <div class="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
-		<a href="#/addcase.html" class="admin_ui_button admin_ui_button_green">
+		<a href="#/case-detail.html" class="admin_ui_button admin_ui_button_green">
 			新增
 		</a>
 		<a class="admin_ui_button admin_ui_button_white">
@@ -44,3 +41,37 @@
 		</a>
 	</div>
 </div>
+<script>
+	new Vue({
+		el: '#case_page',
+		data: function(){
+			return {
+				list: []
+			}
+		},
+		methods: {
+			removeItem: function(index) {
+				if (!confirm('确定删除该项目')) {
+					return
+				}
+				var self = this
+				ajaxP('/MatchAdmin/Index/ProDelete', {
+					type: 5, // type = p2p bid
+					id: this.list[index].id
+				}).then(function(res){
+					self.list.splice(index, 1)
+				}).catch(function(e){
+					alert('删除失败' + (e.message ? ', 原因:' + e.message : ""))
+				})
+			}
+		},
+		ready: function(){
+			var self = this
+			ajaxP('/MatchAdmin/Index/Lists', {
+				type: 5 // 案例分析
+			}).then(function(res){
+				self.list = res
+			})
+		}
+	})	
+</script>

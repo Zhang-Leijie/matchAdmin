@@ -190,6 +190,12 @@
             } 
         }
     }
+
+    var __$textarea = $('<textarea></textarea>')
+    function unescapeHTML(str){
+        __$textarea.html(str)
+        return __$textarea.val()
+    }
 </script>
 </body>
 </html>
