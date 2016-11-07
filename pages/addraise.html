@@ -1,4 +1,4 @@
-<div id="admin_content_template" class="admin_content_template">
+<div id="addraise_page" class="admin_content_template">
     <div class="admin_content_innerBox admin_ui_cont_bottomPadding">
         <div class="admin_scrollBox">
             <div class="admin_ui_header">
@@ -13,7 +13,7 @@
                                 <td>
                                     <div class="admin_ui_form_field">
                                         <div class="admin_ui_name">项目名称</div>
-                                        <input type="text" class="admin_ui_input">
+                                        <input type="text" class="admin_ui_input" v-model="project_name">
                                     </div>
                                 </td>
                             </tr>
@@ -21,8 +21,8 @@
                                 <td>
                                     <div class="admin_ui_form_field">
                                         <div class="admin_ui_name">分类</div>
-                                        <div>
-                                        	<input type="radio" name="sort" id="sort_1">
+                                        <div v-for="option in options">
+                                        	<input type="radio" name="raiseoption" :id="'raise_'+$index" v-model="project_type">
                                         	<label for="sort_1">车易贷</label>
                                         </div>
                                     </div>
@@ -32,15 +32,15 @@
                                 <td>
                                     <div class="admin_ui_form_field">
                                         <div class="admin_ui_name">背景描述</div>
-                                        <textarea id="background"></textarea>
+                                        <textarea id="project_background"></textarea>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <div class="admin_ui_form_field">
-                                        <div class="admin_ui_name">背景描述</div>
-                                        <textarea id="tinymce2"></textarea>
+                                        <div class="admin_ui_name">详细信息</div>
+                                        <textarea id="project_detail"></textarea>
                                     </div>
                                 </td>
                             </tr>
@@ -56,7 +56,7 @@
 				返回
 			</a>
             <div class="admin_ui_button admin_ui_button_green editBrandButton">
-                新增
+                保存
             </div>
         </div>
     </div>
@@ -64,11 +64,44 @@
 </div>
 <script>
 	var ret = uploadFactory('img_upload')
+
+	new Vue({
+		el: '#addraise_page',
+		data: function(){
+			return {
+				options: [],
+				project_name: "",
+				project_type: ""
+			}
+		},
+		ready: function(){
+			var id = getQueryVariable('id')
+			var self = this
+
+			ajaxP('/MatchAdmin/P2P/P2PTagList').then(function(options){
+				self.options = options
+				return Promise.resolve()
+			}).then(function(){
+				if (id === false) {
+					ajaxP('/MatchAdmin/P2P/P2Pinfo', {
+						type: 5, id: id
+					}).then(function(res){
+						
+					})
+				}
+			})
+		}
+	})
 	tinymce.init({
-		selector: '#background',
+		selector: 'textarea',
 		language: 'zh_CN',
 		plugins: ['image'],
 		file_browser_callback: ret.callback,
 		height: 300
+	}).then(function(editors){
+		var background_editor = editors[0]
+		var detail_editor = editors[1]
+
+
 	})
 </script>

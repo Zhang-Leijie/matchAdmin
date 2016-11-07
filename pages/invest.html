@@ -1,4 +1,4 @@
-<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="admin_content_innerBox">
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="invest_page">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
@@ -14,15 +14,15 @@
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
-					<tr v-for="brand in dataSource_filter" v-show="$index >= (pageIndex-1)*10 && $index < pageIndex*10">
-						<td></td>
-						<td>车易贷</td>
+					<tr v-for="item in list">
+						<td>{{item.name}}</td>
+						<td>{{item.tag}}</td>
 						<td>
-							<a class="iconButton checkIcon">
+							<a class="iconButton checkIcon" :href="'#/p2p-detail.html?id=' + item.id">
 								<i class="fa fa-pencil"></i>
-								编辑
+								查看
 							</a>
-							<div class="iconButton removeIcon">
+							<div class="iconButton removeIcon" @click="removeItem($index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -30,9 +30,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="admin_ui_pagination">
-				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -47,3 +44,37 @@
 		</a>
 	</div>
 </div>
+<script>
+	new Vue({
+		el: '#invest_page',
+		data: function(){
+			return {
+				list: []
+			}
+		},
+		methods: {
+			removeItem: function(index){
+				if (!confirm('确定删除该项目')) {
+					return
+				}
+				var self = this
+				ajaxP('/MatchAdmin/Index/ProDelete', {
+					type: 4, // type = p2p invest
+					id: this.list[index].id
+				}).then(function(res){
+					self.list.splice(index, 1)
+				}).catch(function(e){
+					alert('删除失败' + (e.message ? ', 原因:' + e.message : ""))
+				})
+			}
+		},
+		ready: function(){
+			var self = this
+			ajaxP('/MatchAdmin/Index/Lists', {
+				type: 4
+			}).then(function(res){
+				self.list = res
+			})
+		}
+	})
+</script>

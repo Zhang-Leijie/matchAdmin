@@ -22,7 +22,7 @@
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
-							<div class="iconButton removeIcon">
+							<div class="iconButton removeIcon" @click="removeItem($index)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -51,10 +51,26 @@
 				list: []
 			}
 		},
+		methods: {
+			removeItem: function(index){
+				if (!confirm('确定删除该项目')) {
+					return
+				}
+				var self = this
+				ajaxP('/MatchAdmin/Index/ProDelete', {
+					type: 3, // type = p2p
+					id: this.list[index].id
+				}).then(function(res){
+					self.list.splice(index, 1)
+				}).catch(function(e){
+					alert('删除失败' + (e.message ? ', 原因:' + e.message : ""))
+				})
+			}
+		},
 		ready: function(){
 			var self = this
 			ajaxP('/MatchAdmin/Index/Lists', {
-				type: 6
+				type: 3
 			}).then(function(res){
 				self.list = res
 			})

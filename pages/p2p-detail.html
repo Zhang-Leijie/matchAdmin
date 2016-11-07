@@ -1,0 +1,273 @@
+<style>
+	.sp-form {
+		padding: 20px;
+	}
+	.form-title {
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+	.form-line {
+		display: table;
+		table-layout: fixed;
+		border-collapse: collapse;
+		width: 100%;
+		font-size: 16px;
+		color: #333;
+		margin-bottom: 10px;
+	}
+	.form-hor:after {
+		display: table;
+		content: "";
+		clear: both;
+	}
+	.form-hor > .form-line {
+		display: block;
+		float: left;
+		width: 20%;
+	}
+	.form-hor > .form-line > * {
+		display: inline;
+	}
+	.form-hor > .form-line > .form-value {
+		margin-right: 20px;
+	}
+	.form-line > * {
+		display: table-cell;
+	}
+	.form-line > .form-name {
+		width: 20%;
+		text-align: right;
+	}
+	.form-line > .form-value {
+		word-break: break-all;
+		padding-right: 20%;
+	}
+</style>
+<link rel="stylesheet" href="../source/styles/p2p-raise.css">
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="p2p_detail_page">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">审标详情</span>
+		</div>	
+		<div class="sp-form">
+			<div>
+				<h3 class="form-title">基本信息：</h3>
+				<div class="form-line">
+					<span class="form-name">姓名：</span>
+					<span class="form-value">{{baseinfo.username}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">性别：</span>
+					<span class="form-value">{{baseinfo.gender}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">职业：</span>
+					<span class="form-value">{{baseinfo.job}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">手机号码：</span>
+					<span class="form-value">{{baseinfo.phone}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">地区：</span>
+					<span class="form-value">{{baseinfo.block}}</span>
+				</div>
+			</div>
+			<div>
+				<h3 class="form-title">借款信息：</h3>
+				<div class="form-line">
+					<span class="form-name">项目名称：</span>
+					<span class="form-value">{{baseinfo.name}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">风险要求：</span>
+					<span class="form-value">{{baseinfo.request}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">还款方式：</span>
+					<span class="form-value">{{baseinfo.repay}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">利息偿付：</span>
+					<span class="form-value">{{baseinfo.rate}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">借款金额：</span>
+					<span class="form-value">{{baseinfo.money}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">大写：</span>
+					<span class="form-value">{{baseinfo.money | transferMoney}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">借款期限：</span>
+					<span class="form-value">{{baseinfo.loan_time + '个月'}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">到期期限：</span>
+					<span class="form-value">{{baseinfo.publish_time}}</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">借款说明：</span>
+					<span class="form-value">{{baseinfo.detail}}</span>
+				</div>
+			</div>
+			<div class="form-hor">
+				<h3 class="form-title">借款计算器：</h3>
+				<div class="form-line">
+					<span class="form-name">借款金额：</span>
+					<span class="form-value">aaa</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">利率：</span>
+					<span class="form-value">aaa</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">借款期限：</span>
+					<span class="form-value">aaa</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">还款方式：</span>
+					<span class="form-value">aaa</span>
+				</div>
+				<div class="form-line">
+					<span class="form-name">计息日：</span>
+					<span class="form-value">aaa</span>
+				</div>
+				<table class="admin_ui_table" style="margin-bottom: 10px;">
+					<thead>
+						<tr>
+							<th style="width:80px;">期数</th>
+							<th>每期还款本息</th>
+							<th>借款还款本金</th>
+							<th>利息</th>
+							<th>余额</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="item in back.terms">
+							<td>{{item.qs}}</td>
+							<td>{{item.emTotal}}</td>
+							<td>{{item.em}}</td>
+							<td>{{item.lx}}</td>
+							<td>{{item.restTotal}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<h3 class="form-title">认证信息</h3>
+				<div v-for="item in proof">
+					<div class="form-line">
+						<span class="form-name">认证名称：</span>
+						<span class="form-value">{{item.proof_name}}</span>
+					</div>
+					<div class="form-line">
+						<span class="form-name">&nbsp;</span>
+						<span class="form-value">
+							<a target="_blank" :href="item.proof_detail" class="image-container">
+								<img :src="item.proof_detail" alt="">
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="admin_ui_cont_bottomFixed" id="p2p_detail_back_page">
+	<div class="admin_ui_button_group" style="float: right">
+		<a :href="href" class="admin_ui_button admin_ui_button_white">
+			返回
+		</a>
+	</div>
+</div>
+<script>
+	new Vue({
+		el: "#p2p_detail_page",
+		data: function(){
+			return {
+				baseinfo: {
+					age: "",
+					block: "",
+					detail: "",
+					gender: "",
+					id: "",
+					job: "",
+					loan_time: "",
+					money: "",
+					name: "",
+					phone: "",
+					publish_time: "",
+					rate: "",
+					repay: "",
+					request: "",
+					username: ""
+				},
+				back: {
+					terms: []
+				},
+				proof: []
+			}
+		},
+		ready: function(){
+			var self = this
+			var id = getQueryVariable('id')
+			ajaxP('/MatchAdmin/P2P/P2Pinfo', {
+				id: id,
+				type: 4
+			}).then(function(res){
+				var props = Object.keys(self.baseinfo)
+				props.forEach(function(prop) {
+					if (res.baseinfo[prop]) {
+						self.baseinfo[prop] = res.baseinfo[prop]
+					}
+				})
+				self.back.terms = res.back.terms
+				self.proof = res.match_proof
+			})
+		},
+		filters: {
+			transferMoney: function(money){
+				return transferMoney(parseInt(money.replace(',', '')))
+			}
+		}
+	})
+
+	new Vue({
+		el: "#p2p_detail_back_page",
+		data: function(){
+			return {
+				href: '#/invest.html'
+			}
+		}
+	})
+	function transferMoney(money) {
+		var n = Number.parseInt(money)
+		var fraction = ['角', '分']  
+		var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+		var unit = [ ['元', '万', '亿'], ['', '拾', '佰', '仟']  ]
+		var head = n < 0? '欠': ''
+		n = Math.abs(n)
+
+		var s = ''
+
+		for (var i = 0; i < fraction.length; i++) {  
+		    s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '')
+		}  
+		s = s || '整'
+		n = Math.floor(n)
+
+		for (var i = 0; i < unit[0].length && n > 0; i++) {  
+		    var p = ''
+		    for (var j = 0; j < unit[1].length && n > 0; j++) {  
+		        p = digit[n % 10] + unit[1][j] + p
+		        n = Math.floor(n / 10)  
+		    }  
+		    s = p.replace(/(零.)*零$/, '').replace(/^$/, '零')  + unit[0][i] + s
+		}  
+		return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整')  
+	}
+</script>
