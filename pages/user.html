@@ -26,6 +26,13 @@
 								<i class="fa fa-pencil"></i>
 								查看
 							</a>
+							<div class="iconButton checkIcon" >
+								<input v-model="list.reward">
+								<span @click="printPaper(list.id,list.reward)">
+								<i class="fa fa-pencil"></i>
+								打印证书
+								</span>
+							</div>
 							<div class="iconButton removeIcon">
 								<i class="fa fa-remove"></i>
 								删除
@@ -34,9 +41,9 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="admin_ui_pagination">
-				<!-- <div class="M-box pc" v-show="dataSource_filter.length>0"></div> -->
-			</div>
+			<!-- <div class="admin_ui_pagination">
+				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
+			</div> -->
 		</div>
 	</div>
 </div>
@@ -46,17 +53,28 @@
 		<label for="objective_import" class="admin_ui_button admin_ui_button_green" @click="confirm">
 			导入信息
 		</label>
-		<a class="admin_ui_button admin_ui_button_white">
-			打印证书
-		</a>
 	</div>
 </div>
+<canvas id="certificateCanvas" style="display:none"></canvas>
 <script>
 new Vue({
 	el: '#user_content',
 	data: function(){
 		return{
 			lists:[]
+		}
+	},
+	methods:{
+		printPaper:function(id,reward){
+			ajaxP('/MatchAdmin/index/CertificationPrint', {
+				'id':[id]
+			}).then(function(res){
+				console.log(res[0])
+				var myDate = new Date();
+				var month = myDate.getMonth() - 0 + 1;
+				var day = myDate.getDate();
+				createCanvas(res[0].school_name,res[0].members,res[0].teacher,month,day,reward,res[0].code)	
+			})
 		}
 	},
 	ready: function(){
@@ -100,4 +118,57 @@ new Vue({
 	ready: function(){
 	}
 })
+var createCanvas = function(schoolname, playername, teachername, month, day, reward , code) {
+    var canvas = document.getElementById("certificateCanvas");
+    var cxt = canvas.getContext('2d');
+    canvas.width = 1718;
+    canvas.height = 1277;
+    var img = new Image();
+    var seal = new Image();
+    seal.src = "../source/images/printReward.jpg";
+    var place = [{ pic: "../source/images/printReward.jpg", schoolname: [520, 640], month: [1323, 1065], day: [1422, 1065], playername: [520, 735], teachername: [520, 830], reward:[515,540], code:[1123,1150]}];
+    img.src = place[0].pic;
+    img.onload = function() {
+        var textFont = fontText(name, 11);
+        cxt.drawImage(img, 0, 0);
+        cxt.font = "bold " + textFont + " simsun";
+        cxt.fillStyle = "#333";
+        cxt.font = "3rem SimSun";
+        cxt.fillText(schoolname, place[0].schoolname[0], place[0].schoolname[1]);
+        cxt.fillText(playername, place[0].playername[0], place[0].playername[1]);
+        cxt.fillText(teachername, place[0].teachername[0], place[0].teachername[1]);
+        cxt.fillText(month, place[0].month[0], place[0].month[1]);
+        cxt.fillText(day, place[0].day[0], place[0].day[1]);
+        cxt.fillText(reward, place[0].reward[0], place[0].reward[1]);
+        cxt.fillText(code, place[0].code[0], place[0].code[1]);
+        $.ajax({
+            url: "/home/asist/photo_upload",
+            type: "POST",
+            data: {
+                "file": canvas.toDataURL("image/jpeg", 0.7).split(',')[1],
+                'type':2
+            },
+            success: function(data) {
+                console.log(data);
+                window.open(data)              
+            }
+        });
+    }
+    function fontText(el, size) {
+        var per;
+        zh = el.match(/[\u4e00-\u9fa5]/gm);
+        if (zh) {
+            per = zh.length / el.length;
+        } else {
+            per = 0;
+        }
+        if (el.length <= 4) {
+            font = 1.5;
+        } else {
+            console.log(per, length);
+            font = size / el.length / (1 + per);
+        }
+        return font + "rem";
+    }
+};
 </script>

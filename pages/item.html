@@ -18,11 +18,11 @@
 						<td>{{list.name}}</td>
 						<td>{{list.tag}}</td>
 						<td>
-							<a class="iconButton checkIcon">
+							<a class="iconButton checkIcon" :href="'#/additem.html?id='+list.id">
 								<i class="fa fa-pencil"></i>
 								编辑
 							</a>
-							<div class="iconButton removeIcon" @click="delete(list.id)">
+							<div class="iconButton removeIcon" @click="deleted(list.id)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -55,7 +55,7 @@
 			}
 		},
 		methods: {
-            delete:function(id){
+            deleted:function(id){
                 var self = this
                 if(confirm('确认删除项目')) {
 					ajaxP('/MatchAdmin/Index/ProDelete',{

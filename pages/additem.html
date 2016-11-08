@@ -3,7 +3,7 @@
 		<div class="admin_scrollBox">
 			<div class="admin_ui_header">
 				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-				<span class="maintitle">新增项目设计</span>
+				<span class="maintitle">编辑项目设计</span>
 			</div>
 			<div class="admin_ui_cont">
 				<div class="admin_ui_border admin_ui_cont">
@@ -12,24 +12,8 @@
 							<tr>
 								<td>
 									<div class="admin_ui_form_field">
-										<div class="admin_ui_name">项目图片</div>
-										<label class="admin_ui_slideImageBox" data-sildeImageBox="0" data-src="" for="itemimage">
-											<div class="slideImageUpload">
-												<p class="tip">
-													<i class="fa fa-cloud-upload"></i>
-													点击上传图片
-												</p>
-											</div>
-										</labei>
-										<input type="file" style="display:none" id="itemimage">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="admin_ui_form_field">
 										<div class="admin_ui_name">项目名称</div>
-										<input type="text" class="admin_ui_input">
+										<input type="text" class="admin_ui_input" v-model="name">
 									</div>
 								</td>
 							</tr>
@@ -60,99 +44,91 @@
 			<a href="#/item.html" class="admin_ui_button admin_ui_button_white">
 				返回
 			</a>
-			<div class="admin_ui_button admin_ui_button_green editBrandButton">
-				新增
+			<div class="admin_ui_button admin_ui_button_green editBrandButton" @click="saveData">
+				编辑
 			</div>
 		</div>
 	</div>
 </div>
 <script>
-var editor =  new tinymce.Editor('tinymce', {
-height: 300,
-theme: 'modern',
-language: 'zh_CN',
-plugins: [
-    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-    'searchreplace wordcount visualblocks visualchars code fullscreen',
-    'insertdatetime media nonbreaking save table contextmenu directionality',
-    'emoticons template paste textcolor colorpicker textpattern imagetools'
-],
-toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-toolbar2: 'print preview media | forecolor backcolor | example',
-setup: function(ed) {
-  	
-},
-fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
-image_advtab: true,
-image_upload: true,
-relative_url: false,
-templates: [
-    { title: 'Test template 1', content: 'Test 1' },
-    { title: 'Test template 2', content: 'Test 2' }
-],
-content_css: [
-    '../source/css/tinymce.css'
-]
-}, tinymce.EditorManager);
+var ret = uploadFactory('img_upload')
 
-var editor2 =  new tinymce.Editor('tinymce2', {
-height: 500,
-theme: 'modern',
-language: 'zh_CN',
-plugins: [
-    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-    'searchreplace wordcount visualblocks visualchars code fullscreen',
-    'insertdatetime media nonbreaking save table contextmenu directionality',
-    'emoticons template paste textcolor colorpicker textpattern imagetools'
-],
-toolbar1: 'insertfile undo redo | fontsizeselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-toolbar2: 'print preview media | forecolor backcolor | example',
-setup: function(ed) {
-  	
-},
-fontsize_formats: "12px 14px 18px 24px 36px 48px 60px 72px 84px 96px 108px 120px",
-image_advtab: true,
-image_upload: true,
-relative_url: false,
-templates: [
-    { title: 'Test template 1', content: 'Test 1' },
-    { title: 'Test template 2', content: 'Test 2' }
-],
-content_css: [
-    '../source/css/tinymce.css'
-]
-}, tinymce.EditorManager);
+var editor = new tinymce.Editor('tinymce', {
+	selector: '#tinymce',
+	language: 'zh_CN',
+	plugins: ['image'],
+	file_browser_callback: ret.callback,
+	height: 400
+}, tinymce.EditorManager)
+
+var editor2 = new tinymce.Editor('tinymce2', {
+	selector: '#tinymce2',
+	language: 'zh_CN',
+	plugins: ['image'],
+	file_browser_callback: ret.callback,
+	height: 400
+}, tinymce.EditorManager)
+
 editor.render();
 editor2.render();
 
-function img1(infile,outfile){
-		var result = $(outfile)[0]; 
-		var input = $(infile)[0];
-		if(typeof FileReader==='undefined'){ 
-		    result.innerHTML = "抱歉，你的浏览器不支持 FileReader"; 
-		    input.setAttribute('disabled','disabled');
-		}
-		else{ 
-			input.addEventListener('change',readFile,false);
-		}
-		var imagefile;
-		function readFile(){ 
-		    var file = this.files[0]; 
-		    if(!/image\/\w+/.test(file.type)){ 
-		        alert("文件必须为图片！"); 
-		        return false; 
-		    } 
-		    var reader = new FileReader(); 
-		    reader.readAsDataURL(file);
-		    reader.onload = function(e){ 
-		        result.innerHTML = '<img style="width:100%;height:100%;" src="'+this.result+'" alt=""/>';
-		        imagefile = this.result.split(',')[1];
-		    }
-		}
+var id = getQueryVariable('id')
+if (!id) {
+	id=null
 }
-$(".admin_ui_slideImageBox").mouseenter(function(event) {
-	img1("#itemimage",".slideImageUpload");
-});
+
+new Vue({
+	el: '#admin_content_template',
+	data: function(){
+		return {
+			'info':{},
+			'name':''
+		}
+	},
+	methods: {
+        saveData:function(){
+            var self = this
+            ajaxP('/MatchAdmin/index/DesignProModify',{
+            	'id':id,
+            	'background':editor.getContent(),
+            	'detail':editor2.getContent(),
+            	'tag_id':2,
+            	'type':2,
+            	'name':self.name
+            }).then(function(){
+                if (id) {
+					ajaxP('/MatchAdmin/index/DesignInfo', {
+						'id':id
+					}).then(function(res){
+						alert('修改成功')
+						self.info = res	
+					}).catch(function(e){
+						alert(e.message)
+					})
+				}
+				else{
+					alert('新增成功')
+					window.location.href="#/item.html"
+				}
+            }).catch(function(e){
+				alert(e.message)
+			})
+        }
+    },
+	ready: function(){
+		var self = this
+		if (id) {
+			ajaxP('/MatchAdmin/index/DesignInfo', {
+				'id':id
+			}).then(function(res){
+				self.info = res
+				self.name = res.name
+				editor.setContent(unescapeHTML(res.background))
+				editor2.setContent(unescapeHTML(res.detail))			
+			})
+		}
+	}
+})
 </script>
 
 

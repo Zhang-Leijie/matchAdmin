@@ -31,7 +31,7 @@
 						</div>
 						<div>
 							<label class="admin_ui_slideImageBox" id="admin_ui_slideImageBox" data-sildeImageBox="0" data-src="" for="itemimage">
-								<div class="slideImageUpload">
+								<div class="slideImageUpload" id="slideImageUpload">
 									<p class="tip">
 										<i class="fa fa-cloud-upload"></i>
 										点击上传图片
@@ -80,12 +80,20 @@ new Vue({
 	methods: {
         saveData:function(){
             var self = this
+            var photo = []
+            $('.slideImageUpload').each(function(index, val) {
+            	if ($(this).children('img')) {
+            		photo.push($(this).children('img').attr('src'))
+            	}; 
+            });
             ajaxP('/MatchAdmin/index/FieldModify',{
+            	'text':editor.getContent(),
+            	'photo': photo
             }).then(function(){
-                window.location = 'sign_in.html'
+                window.location.reload()
             })
         }
-    }
+    },
 	ready: function(){
 		var self = this
 		ajaxP('/MatchAdmin/index/Field', {
@@ -135,7 +143,7 @@ function img1(infile,outfile){
 	}
 }
 $('#itemimage').on('click', function(event) {
-	img1("#itemimage",".slideImageUpload");
+	img1("#itemimage","#slideImageUpload");
 	$('#itemimage').unbind('click')
 });
 $('#newWorldchange').on('click', '.admin_ui_button', function(event) {
