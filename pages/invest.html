@@ -33,13 +33,13 @@
 		</div>
 	</div>
 </div>
-<div class="admin_ui_cont_bottomFixed">
+<div class="admin_ui_cont_bottomFixed" id="invest_import_page">
 	<div class="admin_ui_button_group" style="float: right">
-		<input type="file" id="insert" style="display:none">
-		<label class="admin_ui_button admin_ui_button_green" for="insert">
+		<input type="file" id="insert" style="display:none" @change="importExcel">
+		<label class="admin_ui_button admin_ui_button_green" for="insert" @click="confirm">
 			导入
 		</label>
-		<a class="admin_ui_button admin_ui_button_white" href="#/points.html?type=p2pinvest">
+		<a class="admin_ui_button admin_ui_button_white" href="#/invest-points.html">
 			成绩列表
 		</a>
 	</div>
@@ -75,6 +75,35 @@
 			}).then(function(res){
 				self.list = res
 			})
+		}
+	})
+
+	new Vue({
+		el: "#invest_import_page",
+		methods: {
+			confirm: function(e){
+				if (!confirm('导入投标数据?')) {
+					e.preventDefault()
+					return
+				}
+			},
+			importExcel: function(e){
+				debugger
+				var formData = new FormData()
+				formData.append('file', e.target.files[0])
+				formData.append('type', 5)
+				ajaxP('/MatchAdmin/P2P/P2PImport', formData, {
+					//multipart/form-data
+					type: "POST",
+					processData: false,
+					contentType: false,
+					cache: false
+				}).then(function(res){
+					window.location.reload()
+				}).catch(function(e){
+					alert('导入失败' + (e.message ? ': ' + e.message : ""))
+				})
+			}
 		}
 	})
 </script>

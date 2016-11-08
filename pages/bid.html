@@ -16,11 +16,15 @@
 				<tbody class="admin_ui_table_hoverEffect">
 					<tr v-for="item in list">
 						<td>{{item.name}}</td>
-						<td>{{item.proportion}}</td>
 						<td>
-							<a class="iconButton checkIcon">
+							<select v-model="item.proportion" @change="item.proportion_ = $event.target.value">
+								<option v-for="i in [0, 1, 2, 3, 4]" :value="i">{{i}}</option>	
+							</select>
+						</td>
+						<td>
+							<a class="iconButton checkIcon" :href="'#/p2p-detail.html?type=5&id=' + item.id">
 								<i class="fa fa-pencil"></i>
-								编辑
+								查看
 							</a>
 							<div class="iconButton removeIcon" @click="removeItem($index)">
 								<i class="fa fa-remove"></i>
@@ -32,14 +36,15 @@
 			</table>
 		</div>
 	</div>
-</div>
-<div class="admin_ui_cont_bottomFixed">
 	<div class="admin_ui_button_group" style="float: right">
-		<input type="file" id="insert" style="display:none">
-		<label class="admin_ui_button admin_ui_button_green" for="insert">
+		<a class="admin_ui_button admin_ui_button_white" style="background:#419bf9;border-color:#419bf9;color:#fff;" @click="save">
+			保存
+		</a>
+		<input type="file" id="insert" style="display:none" @change="importExcel">
+		<label class="admin_ui_button admin_ui_button_green" for="insert" @click="confirm">
 			导入
 		</label>
-		<a class="admin_ui_button admin_ui_button_white">
+		<a class="admin_ui_button admin_ui_button_white" href="#/bid-points.html">
 			成绩列表
 		</a>
 	</div>
@@ -53,6 +58,12 @@
 			}
 		},
 		methods: {
+			save: function(){
+				var ret = this.list.filter(function(item){
+					return item.proportion_ !== ""
+				})
+				ajaxP('')
+			},
 			removeItem: function(index){
 				if (!confirm('确定删除该项目')) {
 					return
@@ -66,13 +77,39 @@
 				}).catch(function(e){
 					alert('删除失败' + (e.message ? ', 原因:' + e.message : ""))
 				})
+			},
+			confirm: function(e){
+				if (!confirm('导入投标数据?')) {
+					e.preventDefault()
+					return
+				}
+			},
+			importExcel: function(e){
+				debugger
+				var formData = new FormData()
+				formData.append('file_stu', e.target.files[0])
+				formData.append('type', 5) // 投标
+				ajaxP('/MatchAdmin/P2P/P2PImport', formData, {
+					//multipart/form-data
+					type: "POST",
+					processData: false,
+					contentType: false,
+					cache: false
+				}).then(function(res){
+					window.location.reload()
+				}).catch(function(e){
+					alert('导入失败' + (e.message ? ': ' + e.message : ""))
+				})
 			}
 		},
 		ready(){
 			var self = this
 			ajaxP('/MatchAdmin/Index/Lists', {
-				type: 3
+				type: 6
 			}).then(function(res){
+				res.forEach(function(item){
+					item.proportion_ = ""
+				})
 				self.list = res
 			})
 		}

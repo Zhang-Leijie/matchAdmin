@@ -3,7 +3,7 @@
         <div class="admin_scrollBox">
             <div class="admin_ui_header">
                 <i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-                <span class="maintitle">新增项目发标</span>
+                <span class="maintitle">项目发标{{title}}</span>
             </div>
             <div class="admin_ui_cont">
                 <div class="admin_ui_border admin_ui_cont">
@@ -13,7 +13,7 @@
                                 <td>
                                     <div class="admin_ui_form_field">
                                         <div class="admin_ui_name">项目名称</div>
-                                        <input type="text" class="admin_ui_input" v-model="project_name">
+                                        <input type="text" class="admin_ui_input" v-model="name">
                                     </div>
                                 </td>
                             </tr>
@@ -21,9 +21,9 @@
                                 <td>
                                     <div class="admin_ui_form_field">
                                         <div class="admin_ui_name">分类</div>
-                                        <div v-for="option in options">
-                                        	<input type="radio" name="raiseoption" :id="'raise_'+$index" v-model="project_type">
-                                        	<label for="sort_1">车易贷</label>
+                                        <div v-for="option in options" style="display:inline-block;margin-right:10px;">
+                                        	<input type="radio" name="raiseoption" :id="'raise_'+$index" v-model="type" :value="option.id">
+                                        	<label :for="'raise_' + $index">{{option.name}}</label>
                                         </div>
                                     </div>
                                 </td>
@@ -55,7 +55,7 @@
             <a href="#/raise.html" class="admin_ui_button admin_ui_button_white">
 				返回
 			</a>
-            <div class="admin_ui_button admin_ui_button_green editBrandButton">
+            <div @click="save" class="admin_ui_button admin_ui_button_green editBrandButton">
                 保存
             </div>
         </div>
@@ -69,39 +69,96 @@
 		el: '#addraise_page',
 		data: function(){
 			return {
+                id: "-1",
 				options: [],
-				project_name: "",
-				project_type: ""
+				name: "",
+				type: ""
 			}
 		},
+        methods: {
+            save: function(){
+                var isAdd = this.id === ""
+                if (isAdd) {
+                    if (!confirm('确定新增项目?')) {
+                        return
+                    }
+                } else {
+                    if (!confirm('确定修改项目')) {
+                        return
+                    }
+                }
+                var options = {
+                    tag_id: this.type,
+                    type: 3,
+                    name: this.name,
+                    background: this.background_editor.getContent(),
+                    detail: this.detail_editor.getContent()
+                }
+                if (!isAdd) {
+                    options.id = this.id
+                }
+                ajaxP('/MatchAdmin/index/DesignProModify', options).then(function(){
+                    window.location = '#/raise.html' 
+                }).catch(function(e){
+                    alert((isAdd ? '新增失败' : '修改失败') + (e.message ? ', 原因:' + e.message : ""))
+                })
+
+            }
+        },
+        computed: {
+            title: function(){
+                var id = this.id
+                if (id === "-1") { return "" } else if (id === '') { return " - 新增" } else { return " - 修改"}
+            }
+        },
 		ready: function(){
-			var id = getQueryVariable('id')
-			var self = this
+            var $vm = this 
 
-			ajaxP('/MatchAdmin/P2P/P2PTagList').then(function(options){
-				self.options = options
-				return Promise.resolve()
-			}).then(function(){
-				if (id === false) {
-					ajaxP('/MatchAdmin/P2P/P2Pinfo', {
-						type: 5, id: id
-					}).then(function(res){
-						
-					})
-				}
-			})
+            var background_editor = new tinymce.Editor('project_background', {
+                selector: '#project_background',
+                language: 'zh_CN',
+                plugins: ['image'],
+                file_browser_callback: ret.callback,
+                height: 400
+            }, tinymce.EditorManager)
+            
+            background_editor.render()
+
+            $vm.background_editor = background_editor
+
+            var detail_editor = new tinymce.Editor('project_detail', {
+                selector: '#project_detail',
+                language: 'zh_CN',
+                plugins: ['image'],
+                file_browser_callback: ret.callback,
+                height: 400
+            }, tinymce.EditorManager)
+            
+            detail_editor.render()
+
+            $vm.detail_editor = detail_editor
+
+            var id = getQueryVariable('id')
+
+            ajaxP('/MatchAdmin/P2P/P2PTagList').then(function(options){
+                $vm.options = options
+                return Promise.resolve()
+            }).then(function(){
+                if (id === false) {
+                    $vm.id = ""
+                } else {
+                    $vm.id = id 
+                    ajaxP('/MatchAdmin/index/DesignInfo', {
+                        id: id
+                    }).then(function(res){
+                        $vm.name = res.name
+                        $vm.type = res.tag_id
+                        $vm.detail_editor.setContent(unescapeHTML(res.detail))
+                        $vm.background_editor.setContent(unescapeHTML(res.background))
+                    })
+                }
+            })
+
 		}
-	})
-	tinymce.init({
-		selector: 'textarea',
-		language: 'zh_CN',
-		plugins: ['image'],
-		file_browser_callback: ret.callback,
-		height: 300
-	}).then(function(editors){
-		var background_editor = editors[0]
-		var detail_editor = editors[1]
-
-
 	})
 </script>

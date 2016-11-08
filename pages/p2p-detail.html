@@ -16,22 +16,6 @@
 		color: #333;
 		margin-bottom: 10px;
 	}
-	.form-hor:after {
-		display: table;
-		content: "";
-		clear: both;
-	}
-	.form-hor > .form-line {
-		display: block;
-		float: left;
-		width: 20%;
-	}
-	.form-hor > .form-line > * {
-		display: inline;
-	}
-	.form-hor > .form-line > .form-value {
-		margin-right: 20px;
-	}
 	.form-line > * {
 		display: table-cell;
 	}
@@ -43,13 +27,21 @@
 		word-break: break-all;
 		padding-right: 20%;
 	}
+	.form-hor {
+		table-layout: fixed;
+		border-collapse: collapse;
+		width: 100%;
+		font-size: 16px;
+		color: #333;
+		margin-bottom: 10px;
+	}
 </style>
 <link rel="stylesheet" href="../source/styles/p2p-raise.css">
 <div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="p2p_detail_page">
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">审标详情</span>
+			<span class="maintitle">{{title}}</span>
 		</div>	
 		<div class="sp-form">
 			<div>
@@ -114,28 +106,19 @@
 					<span class="form-value">{{baseinfo.detail}}</span>
 				</div>
 			</div>
-			<div class="form-hor">
+			<div>
 				<h3 class="form-title">借款计算器：</h3>
-				<div class="form-line">
-					<span class="form-name">借款金额：</span>
-					<span class="form-value">aaa</span>
-				</div>
-				<div class="form-line">
-					<span class="form-name">利率：</span>
-					<span class="form-value">aaa</span>
-				</div>
-				<div class="form-line">
-					<span class="form-name">借款期限：</span>
-					<span class="form-value">aaa</span>
-				</div>
-				<div class="form-line">
-					<span class="form-name">还款方式：</span>
-					<span class="form-value">aaa</span>
-				</div>
-				<div class="form-line">
-					<span class="form-name">计息日：</span>
-					<span class="form-value">aaa</span>
-				</div>
+				<table class="form-hor">
+					<tbody>
+						<tr>
+							<td>借款金额：{{baseinfo.money}}</td>
+							<td>利率：{{baseinfo.rate}}</td>
+							<td>借款期限：{{baseinfo.loan_time + '个月'}}</td>
+							<td>还款方式：{{baseinfo.repay}}</td>
+							<td>计息日：项目发起成功时</td>
+						</tr>
+					</tbody>
+				</table>
 				<table class="admin_ui_table" style="margin-bottom: 10px;">
 					<thead>
 						<tr>
@@ -189,6 +172,7 @@
 		el: "#p2p_detail_page",
 		data: function(){
 			return {
+				type: getQueryVariable('type') || 4,
 				baseinfo: {
 					age: "",
 					block: "",
@@ -212,12 +196,24 @@
 				proof: []
 			}
 		},
+		computed: {
+			title: function(){
+				if (this.type == 5) {
+					return "投标详情"
+				} else if (this.type == 4) {
+					return "审标详情"
+				} else {
+					return ""
+				}
+			}
+		},
 		ready: function(){
 			var self = this
 			var id = getQueryVariable('id')
+
 			ajaxP('/MatchAdmin/P2P/P2Pinfo', {
 				id: id,
-				type: 4
+				type: this.type
 			}).then(function(res){
 				var props = Object.keys(self.baseinfo)
 				props.forEach(function(prop) {
@@ -239,8 +235,17 @@
 	new Vue({
 		el: "#p2p_detail_back_page",
 		data: function(){
+			var type = getQueryVariable('type') || 4, href
+
+			if (type == 4) {
+				href = '#/invest.html'
+			} else if (type == 5) {
+				href = '#/bid.html'
+			} else {
+				href = ''
+			}
 			return {
-				href: '#/invest.html'
+				href: href
 			}
 		}
 	})

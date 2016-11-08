@@ -1,37 +1,35 @@
-<div id="case_detail_page">
-	<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
-		<div class="admin_scrollBox">
-			<div class="admin_ui_header">
-				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-				<span class="maintitle">案例详情{{title}}</span>
-			</div>	
-			<div class="admin_ui_cont">
-				<div class="admin_ui_border admin_ui_cont">
-				    <table class="admin_ui_table_split_half">
-				        <tbody>
-				            <tr>
-				                <td>
-				                    <div class="admin_ui_form_field">
-				                        <div class="admin_ui_name">项目名称</div>
-				                        <input type="text" class="admin_ui_input" v-model="name">
-				                    </div>
-				                </td>
-				            </tr>
-				            <tr>
-				                <td>
-				                    <div class="admin_ui_form_field">
-				                        <div class="admin_ui_name">详细信息</div>
-				                        <textarea id="project_detail"></textarea>
-				                    </div>
-				                </td>
-				            </tr>
-				        </tbody>
-				    </table>
-				</div>
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="case_detail_page">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">案例详情{{title}}</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_border admin_ui_cont">
+			    <table class="admin_ui_table_split_half">
+			        <tbody>
+			            <tr>
+			                <td>
+			                    <div class="admin_ui_form_field">
+			                        <div class="admin_ui_name">项目名称</div>
+			                        <input type="text" class="admin_ui_input" v-model="name">
+			                    </div>
+			                </td>
+			            </tr>
+			            <tr>
+			                <td>
+			                    <div class="admin_ui_form_field">
+			                        <div class="admin_ui_name">详细信息</div>
+			                        <textarea id="project_detail"></textarea>
+			                    </div>
+			                </td>
+			            </tr>
+			        </tbody>
+			    </table>
 			</div>
 		</div>
-		<input name="file" type="file" id="img_upload" style="display:none;">
 	</div>
+	<input name="file" type="file" id="img_upload" style="display:none;">
 	<div class="admin_ui_cont_bottomFixed">
 		<div class="admin_ui_button_group" style="float: right">
 			<a @click="save" class="admin_ui_button admin_ui_button_green">

@@ -1,0 +1,47 @@
+<div class="admin_content_innerBox" id="bid_point_page">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_cont" style="padding-bottom: 70px;">
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>队伍名称</th>
+						<th>学校</th>
+						<th>得分</th>
+					</tr>
+				</thead>
+				<tbody id="userManagement_userData" class="admin_ui_table_hoverEffect">
+					<tr v-for="item in list">
+						<td>{{item.account}}</td>
+						<td>{{item.school_name}}</td>
+						<td>{{item.score ? item.score : "未完成"}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="admin_ui_cont_bottomFixed" id="point_manipulate">
+		<div class="admin_ui_button_group" style="float: right">
+			<a class="admin_ui_button admin_ui_button_white" href="#/bid.html">
+				返回
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	new Vue({
+		el: '#bid_point_page',
+		data: function(){
+			return {
+				list: []
+			}
+		},
+		ready: function(){
+			var $vm = this
+			// http://www.showdoc.cc/4749?page_id=61710
+			ajaxP('/index.php/MatchAdmin/index/ScoreList?type=6').then(function(res){
+				$vm.list = res
+			})
+		}
+	})
+</script>

@@ -1,0 +1,115 @@
+<div class="admin_content_innerBox" id="raise_points_detail_page">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_cont" style="padding-bottom: 70px;">
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>成绩编号</th>
+						<th style="width:150px;">得分</th>
+					</tr>
+				</thead>
+				<tbody id="userManagement_userData" class="admin_ui_table_hoverEffect">
+					<tr v-for="item in list">
+						<td>{{$index + 1}}</td>
+						<td><input type="text" class="admin_ui_input" v-model="item.score_"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a class="admin_ui_button admin_ui_button_green" :style="uploading ? {background: '#ccc', 'border-color': '#ccc'} : {}" @click="save">
+				保存
+			</a>
+			<a class="admin_ui_button admin_ui_button_white" :href="href">
+				返回
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	var lookup = {
+		raise: {
+			back: '#/raise-points.html',
+			ajax: '/MatchAdmin/index/ScoreInput'
+		},
+		invest: {
+			back: '#/invest-points.html',
+			ajax: '/MatchAdmin/index/ScoreInput'
+		},
+		case: {
+			back: '#/case-points.html',
+			ajax: '/MatchAdmin/index/ScoreInput'
+		}
+	}
+
+	new Vue({
+		el: '#raise_points_detail_page',
+		data: function(){
+			var list = Array.apply(null, {length: 10}).map(function(){
+				return {
+					score_: ""
+				}
+			})
+
+			var type = getQueryVariable('type')
+
+			return {
+				list: list,
+				uploading: false,
+				href: lookup[type].back
+			}
+		},
+		methods: {
+			save: function(){
+				if (confirm('确定保存结果?')) {
+					if (this.uploading) {
+						alert('正在上传成绩...')
+						return
+					}
+
+					var ret = this.list.filter(function(item){
+						return item.score_ !== ''
+					})
+
+					if (ret.length <= 2) {
+						alert('至少需要三个数字')
+						return
+					}
+
+					if (!ret.every(function(item){
+						var score_ = parseFloat(item.score_)
+						if (Number.isNaN(score_)) {
+							alert('请输入合法数字')
+							return false
+						} else if (score_ < 0 || score_ > 100) {
+							alert('请输入0 ~ 100的分数')
+							return false
+						} else {
+							return true
+						}
+					})) {
+						return
+					}
+
+					this.uploading = true
+					var $vm = this
+					var id = getQueryVariable('id')
+					ajaxP('/MatchAdmin/index/ScoreInput', {
+						id: id,
+						score: ret.map(function(item){
+							return item.score_
+						})
+					}).then(function(res){
+						$vm.uploading = true
+						window.location = $vm.href
+					}).catch(function(e){
+						alert('修改失败' + (e.message ? ', 原因:' + e.message : ""))
+						$vm.uploading = true
+					})
+				}
+			}
+		}
+	})
+</script>

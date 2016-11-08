@@ -1,0 +1,57 @@
+<div class="admin_content_innerBox" id="raise_point_page">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_cont" style="padding-bottom: 70px;">
+			<table class="admin_ui_table">
+				<thead>
+					<tr>
+						<th>队伍名称</th>
+						<th>学校</th>
+						<th>题目名称</th>
+						<th>查看</th>
+						<th style="width:150px;">得分</th>
+					</tr>
+				</thead>
+				<tbody id="userManagement_userData" class="admin_ui_table_hoverEffect">
+					<tr v-for="item in list">
+						<td>{{item.account}}</td>
+						<td>{{item.school_name}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.id}}</td>
+						<td v-if="item.score != null">{{item.score}}</td>
+						<td v-else><a style="color: #419bf9" :href="'#/points-detail.html?type=raise&id=' + item.id">请输入</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a class="admin_ui_button admin_ui_button_white" href="#/raise.html">
+				返回
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	new Vue({
+		el: '#raise_point_page',
+		data: function(){
+			return {
+				list: [],
+				score: "",
+				uploading: false
+			}
+		},
+		ready: function(){
+			var self = this
+			ajaxP('/MatchAdmin/index/ScoreList', {
+				type: 3
+			}).then(function(res){
+				res.forEach(function(item){
+					item.score_ = ""
+				})
+				self.list = res
+			})
+		}
+	})
+</script>
