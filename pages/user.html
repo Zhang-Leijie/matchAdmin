@@ -33,7 +33,7 @@
 								打印证书
 								</span>
 							</div>
-							<div class="iconButton removeIcon">
+							<div class="iconButton removeIcon" @click="deleted(list.id)">
 								<i class="fa fa-remove"></i>
 								删除
 							</div>
@@ -75,7 +75,21 @@ new Vue({
 				var day = myDate.getDate();
 				createCanvas(res[0].school_name,res[0].members,res[0].teacher,month,day,reward,res[0].code)	
 			})
-		}
+		},
+		deleted:function(id){
+            var self = this
+            if(confirm('确认删除选手')) {
+				ajaxP('/MatchAdmin/Index/UserDelete',{
+                	"id":[id]
+                }).then(function(){
+                   	ajaxP('/MatchAdmin/index/UserInfo').then(function(data){
+						self.lists = data
+					})
+                })
+			} else {
+				event.preventDefault()
+			}              
+        }
 	},
 	ready: function(){
 		var self = this

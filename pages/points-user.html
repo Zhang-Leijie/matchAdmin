@@ -30,22 +30,10 @@
 </div>
 <script>
 	var lookup = {
-		raise: {
-			back: '#/raise-points.html',
-			ajax: '/MatchAdmin/index/ScoreInput'
+		newWorld: {
+			back: '#/newWorld-points.html',
+			ajax: '/MatchAdmin/index/FieldScoreInput'
 		},
-		invest: {
-			back: '#/invest-points.html',
-			ajax: '/MatchAdmin/index/ScoreInput'
-		},
-		case: {
-			back: '#/case-points.html',
-			ajax: '/MatchAdmin/index/ScoreInput'
-		},
-		item:{
-			back: '#/item-points.html',
-			ajax: '/MatchAdmin/index/ScoreInput'
-		}
 	}
 
 	new Vue({
@@ -100,7 +88,7 @@
 					this.uploading = true
 					var $vm = this
 					var id = getQueryVariable('id')
-					ajaxP('/MatchAdmin/index/ScoreInput', {
+					ajaxP('/MatchAdmin/index/FieldScoreInput', {
 						id: id,
 						score: ret.map(function(item){
 							return item.score_
