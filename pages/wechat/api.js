@@ -1,3 +1,41 @@
+var wAlert = window.alert;  
+window.alert = function (message) {  
+    try {  
+        var iframe = document.createElement("IFRAME");  
+        iframe.style.display = "none";  
+        iframe.setAttribute("src", 'data:text/plain,');  
+        document.documentElement.appendChild(iframe);  
+        var alertFrame = window.frames[0];  
+        var iwindow = alertFrame.window;  
+        if (iwindow == undefined) {  
+            iwindow = alertFrame.contentWindow;  
+        }  
+        iwindow.alert(message);  
+        iframe.parentNode.removeChild(iframe);  
+    }  
+    catch (exc) {  
+        return wAlert(message);  
+    }  
+}  
+var wConfirm = window.confirm;  
+window.confirm = function (message) {  
+    try {  
+        var iframe = document.createElement("IFRAME");  
+        iframe.style.display = "none";  
+        iframe.setAttribute("src", 'data:text/plain,');  
+        document.documentElement.appendChild(iframe);  
+        var alertFrame = window.frames[0];  
+        var iwindow = alertFrame.window;  
+        if (iwindow == undefined) {  
+            iwindow = alertFrame.contentWindow;  
+        }  
+        iwindow.confirm(message);  
+        iframe.parentNode.removeChild(iframe);  
+    }  
+    catch (exc) {  
+        return wConfirm(message);  
+    }  
+} 
 //微信登录
 function Login(code){
     var ajax = $.ajax({
@@ -68,4 +106,21 @@ function shareConfig(title, desc, link, imgUrl) {
         // QQ空间
         wx.onMenuShareQZone(config);
     });
+}
+//投票
+function Vote(id){
+    var ajax = $.ajax({
+        url:"/index.php/MatchAdmin/wechat/Vote",
+        type:"POST",
+        data:{
+            "id":id
+        },
+        success: function(data){
+          alert(data.detail)  
+        },
+        error: function(){
+             
+        }
+    });
+    return ajax;
 }

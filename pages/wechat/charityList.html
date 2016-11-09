@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>工艺设计</title>
+    <title>公益设计</title>
     <script src="../../source/js/jquery-1.11.1.min.js"></script>
     <script src="../../source/js/vue.js"></script>
     <script src="api.js"></script>
@@ -15,25 +15,16 @@
 	<div class="top_img">
 		<img src="../../source/images/topimg.png" style="width:100%">
 	</div>
-	<div class="content_box clearfix">
-		<div class="item">
-			<a href="charityDetail.html">
-				<img src="../../source/images/topimg.png" style="width:100%;height:100px;">
+	<div class="content_box clearfix" id="content_vue" style="display:none;">
+		<div class="item" v-for="list in lists">
+			<a :href="'charityDetail.html?id='+list.id">
+				<img :src="list.index_photo" style="width:100%;height:100px;">
 			</a>
 			<div class="word">
-				队伍名称
+				{{list.account}}
 			</div>
 			<div class="word" style="font-size: 14px">
-				得票数：12
-			</div>
-		</div>
-		<div class="item">
-			<img src="../../source/images/topimg.png" style="width:100%;height:100px;">
-			<div class="word">
-				队伍名称
-			</div>
-			<div class="word" style="font-size: 14px">
-				得票数：12
+				得票数：{{list.votes}}
 			</div>
 		</div>
 	</div>
@@ -45,7 +36,34 @@ var b = a.split("&")[0];
 var c = a.split("&")[1];
 var code = b.split("=")[1];
 console.log(code);
-Login(code); 
+
+$.when(Login(code)).done(function(){
+	new Vue({
+		el: '#content_vue',
+		data: function(){
+			return {
+				lists:[]
+			}
+		},
+		ready: function(){
+			var self = this
+			$.ajax({
+		        url:"/index.php/MatchAdmin/wechat/lists",
+		        type:"POST",
+		        data:{
+		        },
+		        success: function(data){
+		        	self.lists = data.order
+		        	$('.content_box').show()
+		        },
+		        error: function(){
+		             
+		        }
+		    });
+		}
+	})
+})
+
 var url = window.location.href;
 $.when(getSignPackage(url)).done(function(data){
     // window.alert=function(){};
@@ -60,6 +78,8 @@ $.when(getSignPackage(url)).done(function(data){
 })
 
 shareConfig("互联网金融技能大赛", "互联网金融技能大赛", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5e8801f75d9a976e&redirect_uri=http%3A%2F%2Fjr.xiyoukeji.com%2FmatchAdmin%2Fpages%2Fwechat%2FcharityList.html&response_type=code&scope=snsapi_userinfo#wechat_redirect", "http://jr.xiyoukeji.com/matchAdmin/source/images/topimg.png")
+
+
 </script>
 <style>
 	body{

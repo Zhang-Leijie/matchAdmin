@@ -4,26 +4,130 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>工艺设计</title>
+    <title>公益设计</title>
     <script src="../../source/js/jquery-1.11.1.min.js"></script>
     <script src="../../source/js/vue.js"></script>
     <link rel="stylesheet" type="text/css" href="../../source/css/reset.css">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="api.js"></script>
 </head>
 <body>
-	<div class="detail_content">
+	<div class="detail_content" id="content_vue" style="display:none">
 		<div class="info">
-			<img src="../../source/images/topimg.png" class="s_img">
+			<img :src="baseinfo.index_photo" class="s_img">
 			<div class="word">
-				队伍名称：队伍名称<br>
-				学校名称：学校名称<br>
-				指导老师：陈老师<br>
-				得票数：12
+				队伍名称：{{baseinfo.account}}<br>
+				学校名称：{{userinfo.school_name}}<br>
+				指导老师：{{userinfo.teacher}}<br>
+				队伍成员：{{userinfo.members}}<br>
+				得票数：{{baseinfo.votes}}
 			</div>
 		</div>
 		<div class="voteBtn">投&nbsp;&nbsp;票</div>
-		<img src="../../source/images/topimg.png" style='width:100%;margin-top:20px;'>
+		<img :src="baseinfo.project_photo" style='width:100%;margin-top:20px;'>
 	</div>
 </body>
+<script type="text/javascript">
+var htmlurl = window.location.href;
+var a = htmlurl.split("?")[1];
+var b
+var c
+var id
+var code
+if (a) {
+	b = a.split("&")[0];
+	c = a.split("&")[1];
+	console.log(b)
+	console.log(c)
+};
+if (b) {
+	id = b.split("=")[1];
+	console.log(id)
+};   
+if (c) {
+	code = c.split("=")[1];
+	console.log(code)
+};
+if (code) {
+	$.when(Login(code)).done(function(){
+		new Vue({
+			el: '#content_vue',
+			data: function(){
+				return {
+					baseinfo:{},
+					userinfo:{}
+				}
+			},
+			ready: function(){
+				var self = this
+				$.ajax({
+			        url:"/index.php/MatchAdmin/wechat/ListInfo",
+			        type:"POST",
+			        data:{
+			        	'id':id
+			        },
+			        success: function(data){
+			        	self.baseinfo = data.order.baseinfo
+			        	self.userinfo = data.order.userinfo
+			        	$('#content_vue').show()
+			        },
+			        error: function(){
+			             
+			        }
+			    });
+			}
+		})
+	})
+}
+else{
+	new Vue({
+		el: '#content_vue',
+		data: function(){
+			return {
+				baseinfo:{},
+				userinfo:{}
+			}
+		},
+		ready: function(){
+			var self = this
+			$.ajax({
+		        url:"/index.php/MatchAdmin/wechat/ListInfo",
+		        type:"POST",
+		        data:{
+		        	'id':id
+		        },
+		        success: function(data){
+		        	self.baseinfo = data.order.baseinfo
+		        	self.userinfo = data.order.userinfo
+		        	$('#content_vue').show()
+		        },
+		        error: function(){
+		             
+		        }
+		    });
+		}
+	})
+}
+var url = window.location.href;
+$.when(getSignPackage(url)).done(function(data){
+    // window.alert=function(){};
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: data.appId, // 必填，公众号的唯一标识
+        timestamp: data.timestamp+"", // 必填，生成签名的时间戳
+        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+        signature: data.signature,// 必填，签名，见附录1
+        jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+})
+
+shareConfig("互联网金融技能大赛", "互联网金融技能大赛", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5e8801f75d9a976e&redirect_uri=http%3A%2F%2Fjr.xiyoukeji.com%2FmatchAdmin%2Fpages%2Fwechat%2FcharityDetail.html?id="+id+"&response_type=code&scope=snsapi_userinfo#wechat_redirect", "http://jr.xiyoukeji.com/matchAdmin/source/images/topimg.png")
+
+$(".voteBtn").click(function(event) {
+	Vote(id);
+});
+
+</script>
 <style>
 	body{
 		margin: 0px;
