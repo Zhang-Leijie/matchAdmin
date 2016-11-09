@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>工艺设计</title>
+    <script src="../../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../../source/js/vue.js"></script>
+    <script src="api.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../source/css/reset.css">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<body>
+	<div class="top_img">
+		<img src="../../source/images/topimg.png" style="width:100%">
+	</div>
+	<div class="content_box clearfix">
+		<div class="item">
+			<a href="charityDetail.html">
+				<img src="../../source/images/topimg.png" style="width:100%;height:100px;">
+			</a>
+			<div class="word">
+				队伍名称
+			</div>
+			<div class="word" style="font-size: 14px">
+				得票数：12
+			</div>
+		</div>
+		<div class="item">
+			<img src="../../source/images/topimg.png" style="width:100%;height:100px;">
+			<div class="word">
+				队伍名称
+			</div>
+			<div class="word" style="font-size: 14px">
+				得票数：12
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+var htmlurl = window.location.href;
+var a = htmlurl.split("?")[1];
+var b = a.split("&")[0];
+var c = a.split("&")[1];
+var code = b.split("=")[1];
+console.log(code);
+Login(code); 
+var url = window.location.href;
+$.when(getSignPackage(url)).done(function(data){
+    // window.alert=function(){};
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: data.appId, // 必填，公众号的唯一标识
+        timestamp: data.timestamp+"", // 必填，生成签名的时间戳
+        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+        signature: data.signature,// 必填，签名，见附录1
+        jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+})
+
+shareConfig("互联网金融技能大赛", "互联网金融技能大赛", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5e8801f75d9a976e&redirect_uri=http%3A%2F%2Fjr.xiyoukeji.com%2FmatchAdmin%2Fpages%2Fwechat%2FcharityList.html&response_type=code&scope=snsapi_userinfo#wechat_redirect", "http://jr.xiyoukeji.com/matchAdmin/source/images/topimg.png")
+</script>
+<style>
+	body{
+		margin: 0px;
+	}
+	.top_img{
+		width: 100%;
+	}
+	.content_box{
+		width: 100%;
+		padding: 15px 1%;
+	}
+	.item{
+		width: 48%;
+		margin: 0px 1% 15px;
+		float: left;
+	}
+	.word{
+		text-align: center;
+		line-height: 30px;
+		font-size: 16px;
+		color: #333
+	}
+	.clearfix:after {
+		display: table;
+		content: "";
+		clear: both;
+	}
+</style>
+</html>

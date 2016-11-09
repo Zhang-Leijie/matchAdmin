@@ -49,6 +49,7 @@
 			</div>
 		</div>
 	</div>
+	<input name="file" type="file" id="img_upload" style="display:none;">
 </div>
 <script>
 var ret = uploadFactory('img_upload')
@@ -123,6 +124,8 @@ new Vue({
 			}).then(function(res){
 				self.info = res
 				self.name = res.name
+				editor.render()
+				editor2.render()
 				editor.setContent(unescapeHTML(res.background))
 				editor2.setContent(unescapeHTML(res.detail))			
 			})

@@ -98,6 +98,7 @@ new Vue({
 		var self = this
 		ajaxP('/MatchAdmin/index/Field', {
 		}).then(function(res){
+			editor.render()
 			editor.setContent(unescapeHTML(res.text))
 			self.info = res
 		})

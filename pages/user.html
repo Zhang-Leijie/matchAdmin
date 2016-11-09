@@ -27,7 +27,7 @@
 								查看
 							</a>
 							<div class="iconButton checkIcon" >
-								<input v-model="list.reward">
+								<input v-model="list.reward" placeholder="请输入获奖奖项">
 								<span @click="printPaper(list.id,list.reward)">
 								<i class="fa fa-pencil"></i>
 								打印证书
@@ -55,6 +55,7 @@
 		</label>
 	</div>
 </div>
+<a id="img_blank" target="_blank" style="display:none"></a>
 <canvas id="certificateCanvas" style="display:none"></canvas>
 <script>
 new Vue({
@@ -164,8 +165,8 @@ var createCanvas = function(schoolname, playername, teachername, month, day, rew
             },
             success: function(data) {
             	var s = $.parseJSON(data)
-                console.log(s);
-                window.open(s.order[0])             
+            	$("#img_blank").attr('href', s.order[0]);
+                $("#img_blank").get(0).click();          
             }
         });
     }
