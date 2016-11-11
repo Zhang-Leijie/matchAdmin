@@ -17,9 +17,10 @@
 					<tr v-for="item in list">
 						<td>{{item.name}}</td>
 						<td>
-							<select v-model="item.proportion" @change="item.proportion_ = $event.target.value">
+							<!-- <select v-model="item.proportion" @change="item.proportion_ = $event.target.value">
 								<option v-for="i in [0, 1, 2, 3, 4]" :value="i">{{i}}</option>	
-							</select>
+							</select> -->
+							{{item.proportion}}
 						</td>
 						<td>
 							<a class="iconButton checkIcon" :href="'#/p2p-detail.html?type=5&id=' + item.id">
@@ -62,7 +63,7 @@
 				var ret = this.list.filter(function(item){
 					return item.proportion_ !== ""
 				})
-				ajaxP('')
+				//ajaxP('')
 			},
 			removeItem: function(index){
 				if (!confirm('确定删除该项目')) {
@@ -70,7 +71,7 @@
 				}
 				var self = this
 				ajaxP('/MatchAdmin/Index/ProDelete', {
-					type: 3, // type = p2p bid
+					type: 6, // type = p2p bid
 					id: this.list[index].id
 				}).then(function(res){
 					self.list.splice(index, 1)
