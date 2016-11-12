@@ -19,7 +19,10 @@
 						<td v-if="item.isfinished != 1"><a target="_blank" style="color: #419bf9" :href="'/match/#/p2p-raise/check?id=' + item.relation_id + '&relation_id=' + item.redirect_id">查阅地址</a></td>
 						<td v-if="item.isfinished == 1">查阅地址</td>
 						<td v-if="item.score != null">{{item.score}}</td>
-						<td v-else><a style="color: #419bf9" :href="'#/points-detail.html?type=raise&id=' + item.id">请输入</a></td>
+						<td v-else>
+							<a style="color: #419bf9" :href="'#/points-detail.html?type=raise&id=' + item.id" v-if = 'item.isfinished==2'>请输入</a>
+							<div v-else>未完成</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

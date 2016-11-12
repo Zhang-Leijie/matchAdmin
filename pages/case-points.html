@@ -18,7 +18,10 @@
 						<td>{{item.name}}</td>
 						<td>{{item.id}}</td>
 						<td v-if="item.score != null">{{item.score}}</td>
-						<td v-else><a :href="'#/points-detail.html?type=case&id=' + item.id" style="color:#419bf9">请输入</a></td>
+						<td v-else>
+							<a :href="'#/points-detail.html?type=case&id=' + item.id" style="color:#419bf9" v-if = 'item.isfinished==2'>请输入</a>
+							<div v-else>未完成</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

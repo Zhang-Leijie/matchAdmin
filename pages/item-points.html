@@ -17,12 +17,16 @@
 						<td>{{item.school_name}}</td>
 						<td>{{item.name}}</td>
 						<td>
-							<a :href="'/match/index.html#/cf-item/check?id='+item.relation_id+'&relation_id='+item.redirect_id" v-if="item.isfinished==2">
+							<a style="color: #419bf9" :href="'/match/index.html#/cf-item/check?id='+item.relation_id+'&relation_id='+item.redirect_id" v-if="item.isfinished==2">
 								评阅地址
 							</a>
+							<div v-else>评阅地址</div>
 						</td>
 						<td v-if="item.score != null"><span v-if="item.isfinished==2">{{item.score}}</span></td>
-						<td v-else><a style="color:#419bf9" :href="'#/points-detail.html?type=item&id=' + item.id" v-if="item.isfinished==2">请输入</a></td>
+						<td v-else>
+							<a style="color:#419bf9" :href="'#/points-detail.html?type=item&id=' + item.id" v-if="item.isfinished==2">请输入</a>
+							<div v-else>未完成</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>
