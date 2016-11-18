@@ -16,7 +16,11 @@
 						<td>{{item.account}}</td>
 						<td>{{item.school_name}}</td>
 						<td>{{item.name}}</td>
-						<td>{{item.id}}</td>
+						<td>
+							<a :href="'#/case-answer.html?id=' + item.id" style="color:#419bf9">
+							查看答案
+							</a>
+						</td>
 						<td v-if="item.score != null">{{item.score}}</td>
 						<td v-else>
 							<a :href="'#/points-detail.html?type=case&id=' + item.id" style="color:#419bf9" v-if = 'item.isfinished==2'>请输入</a>

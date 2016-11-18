@@ -1,0 +1,73 @@
+<div class="admin_content_innerBox admin_ui_cont_bottomPadding" id="case_detail_page">
+	<div class="admin_scrollBox">
+		<div class="admin_ui_header">
+			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+			<span class="maintitle">案例答案</span>
+		</div>	
+		<div class="admin_ui_cont">
+			<div class="admin_ui_border admin_ui_cont">
+			    <table class="admin_ui_table_split_half">
+			        <tbody>
+			            <tr>
+			                <td>
+			                    <div class="admin_ui_form_field">
+			                        <div class="admin_ui_name">详细信息</div>
+			                        <textarea id="project_detail"></textarea>
+			                    </div>
+			                </td>
+			            </tr>
+			        </tbody>
+			    </table>
+			</div>
+		</div>
+	</div>
+	<input name="file" type="file" id="img_upload" style="display:none;">
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a href="#/case-points.html" class="admin_ui_button admin_ui_button_white">
+				返回
+			</a>
+		</div>
+	</div>
+</div>
+<script>
+	var ret = uploadFactory('img_upload')
+
+	new Vue({
+		el: '#case_detail_page',
+		data: function(){
+			return {
+				
+			}
+		},
+		methods: {
+			
+		},
+		ready: function(){
+			var $vm = this 
+			var id = getQueryVariable('id')
+
+			var editor = new tinymce.Editor('project_detail', {
+				selector: '#project_detail',
+				language: 'zh_CN',
+				plugins: ['image'],
+				file_browser_callback: ret.callback,
+				height: 400
+			}, tinymce.EditorManager)
+			
+			editor.render()
+
+			this.editor = editor
+
+		
+			this.id = id 
+			ajaxP('/MatchAdmin/index/AnalysisAnswerInfo', {
+				id: id
+			}).then(function(res){
+				$vm.name = res.name
+				$vm.editor.setContent(unescapeHTML(res.text))
+			})
+			
+		}
+	})
+</script>

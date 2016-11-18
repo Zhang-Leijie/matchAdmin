@@ -20,7 +20,8 @@
 				学校名称：{{userinfo.school_name}}<br>
 				指导老师：{{userinfo.teacher}}<br>
 				队伍成员：{{userinfo.members}}<br>
-				得票数：{{baseinfo.votes}}
+				得票数：{{baseinfo.votes}}<br>
+				截止时间:{{timestampFormat(userinfo.vote_time)}}
 			</div>
 		</div>
 		<div class="voteBtn">投&nbsp;&nbsp;票</div>
@@ -58,6 +59,23 @@ if (code) {
 					userinfo:{}
 				}
 			},
+			methods:{
+				timestampFormat:function(timestamp){
+					var _date = new Date()
+					var date = _date
+					date.setTime(Number.parseInt(timestamp))
+					var year = date.getFullYear()
+					var month = "0" + (date.getMonth()+1)
+					var hours = "0" + date.getHours()
+					var minutes = "0" + date.getMinutes()
+					var date = "0" + date.getUTCDate()
+					return year + '-' + 
+						month.substr(-2) + '-' + 
+						date.substr(-2) + ' ' + 
+						hours.substr(-2) + ":" + 
+						minutes.substr(-2)
+				}
+			},
 			ready: function(){
 				var self = this
 				$.ajax({
@@ -86,6 +104,23 @@ else{
 			return {
 				baseinfo:{},
 				userinfo:{}
+			}
+		},
+		methods:{
+			timestampFormat:function(timestamp){
+				var _date = new Date()
+				var date = _date
+				date.setTime(Number.parseInt(timestamp))
+				var year = date.getFullYear()
+				var month = "0" + (date.getMonth()+1)
+				var hours = "0" + date.getHours()
+				var minutes = "0" + date.getMinutes()
+				var date = "0" + date.getUTCDate()
+				return year + '-' + 
+					month.substr(-2) + '-' + 
+					date.substr(-2) + ' ' + 
+					hours.substr(-2) + ":" + 
+					minutes.substr(-2)
 			}
 		},
 		ready: function(){

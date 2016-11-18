@@ -4,8 +4,8 @@
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
 			<span class="maintitle">公益设计</span>
 		</div>	
-		<div class="admin_ui_cont">
-			<table class="admin_ui_table" id="charity_content">
+		<div class="admin_ui_cont" id="charity_content">
+			<table class="admin_ui_table">
 				<thead>
 					<tr>
 						<th>队伍名称</th>
@@ -13,6 +13,7 @@
 						<th>项目名称</th>
 						<th>微信得票</th>
 						<th>得分</th>
+						<th>截止时间</th>
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
@@ -21,18 +22,32 @@
 						<td>{{list.school_name}}</td>
 						<td>{{list.name}}</td>
 						<td>
-							{{list.vote}}
+							{{list.votes}}
 						</td>
 						<td>
-							<input type="number" v-model="list.score" v-if="list.name">
-							<div class="iconButton checkIcon" @click="changePoints(list.id,list.score)" v-if="list.name">
+							{{list.score}}
+							<!-- <input type="number" v-model="list.score" v-if="list.name"> -->
+							<!-- <div class="iconButton checkIcon" @click="changePoints(list.id,list.score)" v-if="list.name">
 								<i class="fa fa-pencil"></i>
 								修改
-							</div>
+							</div> -->
+						</td>
+						<td>
+							{{timestampFormat(list.vote_time)}}
 						</td>
 					</tr>
 				</tbody>
 			</table>
+			<div style="margin-top:20px;">
+				<div class="ne-input-date">
+					修改截止时间
+					<input id="inputtime" type="text" class="ne-input" @focus="popDatepicker" v-model="time">
+				</div>
+				<div class="iconButton checkIcon" @click="changeTime(time)">
+					<i class="fa fa-pencil"></i>
+					确认
+				</div>
+			</div>
 			<!-- <div class="admin_ui_pagination">
 				<div class="M-box pc" v-show="dataSource_filter.length>0"></div>
 			</div> -->
@@ -44,10 +59,46 @@
 		el: '#charity_content',
 		data: function(){
 			return{
-				lists:[]
+				lists:[],
+				time:""
 			}
 		},
 		methods:{
+			changeTime:function(time){
+				var self = this
+				ajaxP('/MatchAdmin/index/VoteTimeSet',{
+					"time":time,
+				}).then(function(data){
+					alert("修改成功")
+					ajaxP('/MatchAdmin/peer/CrowdfundingcList').then(function(data){
+						self.lists = data
+					})
+				}).catch(function(e){
+					alert(e.message)
+				})
+			},
+			popDatepicker: function(){
+				var self = this
+				var options = {
+					el: inputtime
+				}
+				WdatePicker(options)
+			},
+			timestampFormat:function(timestamp){
+				var _date = new Date()
+				var date = _date
+				date.setTime(Number.parseInt(timestamp))
+				var year = date.getFullYear()
+				var month = "0" + (date.getMonth()+1)
+				var hours = "0" + date.getHours()
+				var minutes = "0" + date.getMinutes()
+				var date = "0" + date.getUTCDate()
+				return year + '-' + 
+					month.substr(-2) + '-' + 
+					date.substr(-2) + ' ' + 
+					hours.substr(-2) + ":" + 
+					minutes.substr(-2)
+			},
 			changePoints:function(id,score){
 				var self = this
 				ajaxP('/MatchAdmin/peer/CrowdfundingcScoreInput',{
@@ -71,3 +122,18 @@
 		}
 	})
 </script>
+<style lang="less">
+	.ne-input-date {
+		display: inline-block;
+		vertical-align: middle;
+		position: relative;
+	}
+
+	.ne-input-date input {
+		padding-right: 20px;
+		position: relative;
+		background-color: transparent;
+		z-index: 10;
+		border: 1px solid #ccc
+	}
+</style>

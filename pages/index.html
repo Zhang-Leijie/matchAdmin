@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../source/css/_custom.css">
 
     <script src="../source/js/jquery-1.11.1.min.js"></script>
+    <script src="../source/js/datepicker/WdatePicker.js"></script>
     <script src="../source/js/vue.js"></script>
     <script src="../source/js/ajax.js"></script>
     <script src="../source/js/public.js"></script>
@@ -48,6 +49,34 @@
     </div>
     <div id="admin_left" class="admin_left">
         <div class="leftmenu">
+            <!-- <div class="">
+                <a class="line">
+                    <span class="icon markIcon">
+                        <i class="fa fa-gears fa-lg"></i>
+                    </span>
+                    <div class="name">系统管理</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </a>
+                <div class="submenu" style="display: none;">
+                    <a class="line" href="#/operateRecord.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-history"></i>
+                        </span>
+                        <div class="name">操作记录</div>
+                    </a>
+                    <a class="line" href="#/adminAccount.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-edit"></i>
+                        </span>
+                        <div class="name">密码修改</div>
+                    </a>
+                </div>
+            </div> -->
             <div>
                 <a href="#/objective.html" class="line">
                     <span class="icon markIcon">
@@ -57,69 +86,125 @@
                 </a>
             </div>
             <div>
-                <a class="line" href="#/raise.html">
+                <a class="line">
                     <span class="icon markIcon">
-                        <i class="fa fa-calendar-plus-o fa-lg"></i>
+                        <i class="fa fa-credit-card fa-lg"></i>
                     </span>
-                    <div class="name">项目发标</div>
+                    <div class="name">P2P借贷</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
                 </a>
+                <div class="submenu" style="display: none;">
+                    <a class="line" href="#/raise.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-calendar-times-o fa-lg"></i>
+                        </span>
+                        <div class="name">项目发标</div>
+                    </a>
+                    <a class="line" href="#/invest.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-calendar-check-o fa-lg"></i>
+                        </span>
+                        <div class="name">审标操作</div>
+                    </a>
+                    <a class="line" href="#/bid.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-calendar-minus-o fa-lg"></i>
+                        </span>
+                        <div class="name">投标操作</div>
+                    </a>
+                </div>
             </div>
             <div>
-                <a class="line" href="#/invest.html">
+                <a class="line">
                     <span class="icon markIcon">
-                        <i class="fa fa-calendar-times-o fa-lg"></i>
+                        <i class="fa fa-cubes fa-lg"></i>
                     </span>
-                    <div class="name">审标操作</div>
-                </a>
-            </div> 
-            <div>
-                <a class="line" href="#/bid.html">
-                    <span class="icon markIcon">
-                        <i class="fa fa-calendar-check-o fa-lg"></i>
+                    <div class="name">众筹项目</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
                     </span>
-                    <div class="name">投标操作</div>
-                </a>
-            </div> 
-            <div>
-                <a class="line" href="#/case.html">
-                    <span class="icon markIcon">
-                        <i class="fa fa-commenting fa-lg"></i>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
                     </span>
-                    <div class="name">案例分析</div>
                 </a>
-            </div> 
-            <div>
-                <a class="line" href="#/charity.html">
-                    <span class="icon markIcon">
-                        <i class="fa fa-sliders fa-lg"></i>
-                    </span>
-                    <div class="name">公益设计</div>
-                </a>
+                <div class="submenu" style="display: none;">
+                    <a class="line" href="#/charity.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-sliders fa-lg"></i>
+                        </span>
+                        <div class="name">公益众筹</div>
+                    </a>
+                    <a class="line" href="#/item.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-sort-amount-desc fa-lg"></i>
+                        </span>
+                        <div class="name">股权众筹</div>
+                    </a>
+                </div>
             </div>
+
             <div>
-                <a class="line" href="#/item.html">
+                <a class="line">
                     <span class="icon markIcon">
-                        <i class="fa fa-sort-amount-desc fa-lg"></i>
+                        <i class="fa fa-gears fa-lg"></i>
                     </span>
-                    <div class="name">项目设计</div>
+                    <div class="name">创新创业</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
                 </a>
+                <div class="submenu" style="display: none;">
+                    <a class="line" href="#/case.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-commenting fa-lg"></i>
+                        </span>
+                        <div class="name">案例分析</div>
+                    </a>
+                    <a class="line" href="#/newWorld.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-paper-plane-o fa-lg"></i>
+                        </span>
+                        <div class="name">创业新天地</div>
+                    </a>
+                </div>
             </div>
+            
             <div>
-                <a class="line" href="#/newWorld.html">
-                    <span class="icon markIcon">
-                        <i class="fa fa-paper-plane-o fa-lg"></i>
-                    </span>
-                    <div class="name">创业新天地</div>
-                </a>
-            </div>  
-            <div>
-                <a class="line" href="#/user.html">
+                <a class="line">
                     <span class="icon markIcon">
                         <i class="fa fa-users fa-lg"></i>
                     </span>
                     <div class="name">选手信息</div>
+                    <span class="icon downIcon">
+                        <i class="fa fa-angle-down fa-lg"></i>
+                    </span>
+                    <span class="icon rightIcon">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
                 </a>
-            </div>         
+                <div class="submenu" style="display: none;">
+                    <a class="line" href="#/user.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-commenting fa-lg"></i>
+                        </span>
+                        <div class="name">成绩统计</div>
+                    </a>
+                    <a class="line" href="#/user_manage.html">
+                        <span class="icon markIcon">
+                            <i class="fa fa-commenting fa-lg"></i>
+                        </span>
+                        <div class="name">人员管理</div>
+                    </a>
+                </div>
+            </div>   
         </div>
     </div>
     <div id="admin_content" class="admin_content"></div>

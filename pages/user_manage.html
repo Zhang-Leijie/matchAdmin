@@ -2,7 +2,7 @@
 	<div class="admin_scrollBox">
 		<div class="admin_ui_header">
 			<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-			<span class="maintitle">成绩统计</span>
+			<span class="maintitle">人员管理</span>
 		</div>	
 		<div class="admin_ui_cont" id="user_content">
 			<table class="admin_ui_table">
@@ -22,10 +22,6 @@
 						<td>{{list.school_name}}</td>
 						<td>{{list.totalscore}}</td>
 						<td>
-							<a :href="'#/userdetail.html?id='+list.id+'&pos='+$index" class="iconButton checkIcon">
-								<i class="fa fa-pencil"></i>
-								查看
-							</a>
 							<div class="iconButton checkIcon" >
 								<input v-model="list.reward" placeholder="请输入获奖奖项">
 								<span @click="printPaper(list.id,list.reward)">
@@ -95,7 +91,7 @@ new Vue({
 	ready: function(){
 		var self = this
 		ajaxP('/MatchAdmin/index/UserInfo',{
-			"state":2
+			"state":1
 		}).then(function(data){
 			self.lists = data
 		})
