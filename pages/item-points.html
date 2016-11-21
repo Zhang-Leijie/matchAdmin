@@ -17,7 +17,7 @@
 						<td>{{item.school_name}}</td>
 						<td>{{item.name}}</td>
 						<td>
-							<a style="color: #419bf9" :href="'/match/index.html#/cf-item/check?id='+item.relation_id+'&relation_id='+item.redirect_id" v-if="item.isfinished==2">
+							<a target="_blank" style="color: #419bf9" :href="'/match/index.html#/cf-item/check?id='+item.relation_id+'&relation_id='+item.redirect_id" v-if="item.isfinished==2">
 								评阅地址
 							</a>
 							<div v-else>评阅地址</div>
