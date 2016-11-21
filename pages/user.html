@@ -68,7 +68,8 @@ new Vue({
 	methods:{
 		printPaper:function(id,reward){
 			ajaxP('/MatchAdmin/index/CertificationPrint', {
-				'id':[id]
+				'id':[id],
+				"reward":reward
 			}).then(function(res){
 				console.log(res[0])
 				var myDate = new Date();
