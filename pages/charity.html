@@ -13,7 +13,7 @@
 						<th>项目名称</th>
 						<th>微信得票</th>
 						<th>得分</th>
-						<th>截止时间</th>
+						<!-- <th>截止时间</th> -->
 					</tr>
 				</thead>
 				<tbody class="admin_ui_table_hoverEffect">
@@ -32,9 +32,9 @@
 								修改
 							</div> -->
 						</td>
-						<td>
+						<!-- <td>
 							{{timestampFormat(list.vote_time)}}
-						</td>
+						</td> -->
 					</tr>
 				</tbody>
 			</table>
@@ -71,7 +71,8 @@
 				}).then(function(data){
 					alert("修改成功")
 					ajaxP('/MatchAdmin/peer/CrowdfundingcList').then(function(data){
-						self.lists = data
+						self.lists = data.List
+						self.time = self.timestampFormat(data.vote_time)
 					})
 				}).catch(function(e){
 					alert(e.message)
@@ -107,7 +108,8 @@
 				}).then(function(data){
 					alert("修改成功")
 					ajaxP('/MatchAdmin/peer/CrowdfundingcList').then(function(data){
-						self.lists = data
+						self.lists = data.List
+						self.time = self.timestampFormat(data.vote_time)
 					})
 				}).catch(function(e){
 					alert(e.message)
@@ -117,7 +119,8 @@
 		ready: function(){
 			var self = this
 			ajaxP('/MatchAdmin/peer/CrowdfundingcList').then(function(data){
-				self.lists = data
+				self.lists = data.List
+				self.time = self.timestampFormat(data.vote_time)
 			})
 		}
 	})
