@@ -1,0 +1,45 @@
+<div id="admin_content_template" class="admin_content_template">
+	<div class="admin_content_innerBox admin_ui_cont_bottomPadding">
+		<div class="admin_scrollBox">
+			<div class="admin_ui_header">
+				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
+				<span class="maintitle">审标答案</span>
+			</div>
+			<div class="admin_ui_cont">
+				<div class="userdetail">选手答案</div>
+				<div class="userdetail">{{answer}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="admin_ui_cont_bottomFixed">
+		<div class="admin_ui_button_group" style="float: right">
+			<a href="#/invest-points.html" class="admin_ui_button admin_ui_button_white">
+				返回
+			</a>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	.userdetail{
+		line-height: 40px;
+	}
+</style>
+<script>
+var  id = window.location.hash.split('=')[1]
+new Vue({
+	el: '#admin_content_template',
+	data: function(){
+		return{
+			answer:''
+		}
+	},
+	ready: function(){
+		var self = this
+		ajaxP('/MatchAdmin/P2P/VerifyAnswerInfo',{
+			'id':id
+		}).then(function(data){
+			self.answer = data
+		})
+	}
+})	
+</script>

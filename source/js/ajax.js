@@ -10,7 +10,8 @@ var hasNonLoginError = false
 
 var ajaxP = function(url, params, config){
 	var options = {
-		url: url
+		url: url,
+		method:"POST"
 	}
 	if (params) {
 		options.data = params
