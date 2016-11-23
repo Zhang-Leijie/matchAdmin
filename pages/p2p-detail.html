@@ -47,7 +47,7 @@
 			<div>
 				<h3 class="form-title">基本信息：</h3>
 				<div class="form-line">
-					<span class="form-name">姓名：</span>
+					<span class="form-name">法人名称：</span>
 					<span class="form-value">{{baseinfo.username}}</span>
 				</div>
 				<div class="form-line">
@@ -79,7 +79,7 @@
 				</div>
 				<div class="form-line">
 					<span class="form-name">还款方式：</span>
-					<span class="form-value">{{baseinfo.repay}}</span>
+					<span class="form-value">{{baseinfo.repay_type}}</span>
 				</div>
 				<div class="form-line">
 					<span class="form-name">利息偿付：</span>
@@ -102,7 +102,7 @@
 					<span class="form-value">{{baseinfo.publish_time}}</span>
 				</div>
 				<div class="form-line">
-					<span class="form-name">借款说明：</span>
+					<span class="form-name">借款用途：</span>
 					<span class="form-value">{{baseinfo.detail}}</span>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 							<td>借款金额：{{baseinfo.money}}</td>
 							<td>利率：{{baseinfo.rate}}</td>
 							<td>借款期限：{{baseinfo.loan_time + '个月'}}</td>
-							<td>还款方式：{{baseinfo.repay}}</td>
+							<td>还款方式：{{baseinfo.repay_type}}</td>
 							<td>计息日：项目发起成功时</td>
 						</tr>
 					</tbody>
@@ -186,7 +186,7 @@
 					phone: "",
 					publish_time: "",
 					rate: "",
-					repay: "",
+					repay_type: "",
 					request: "",
 					username: ""
 				},
