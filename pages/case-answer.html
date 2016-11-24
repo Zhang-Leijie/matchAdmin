@@ -65,7 +65,7 @@
 				id: id
 			}).then(function(res){
 				$vm.name = res.name
-				$vm.editor.setContent(unescapeHTML(res.text))
+				$vm.editor.setContent(unescapeHTML(res.answer))
 			})
 			
 		}
