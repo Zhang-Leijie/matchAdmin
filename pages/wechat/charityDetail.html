@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>公益设计</title>
+    <title>公益众筹</title>
     <script src="../../source/js/jquery-1.11.1.min.js"></script>
     <script src="../../source/js/vue.js"></script>
     <link rel="stylesheet" type="text/css" href="../../source/css/reset.css">
@@ -20,11 +20,10 @@
 				学校名称：{{userinfo.school_name}}<br>
 				指导老师：{{userinfo.teacher}}<br>
 				队伍成员：{{userinfo.members}}<br>
-				得票数：{{baseinfo.votes}}<br>
-				截止时间:{{timestampFormat(userinfo.vote_time)}}
 			</div>
 		</div>
-		<div class="voteBtn">投&nbsp;&nbsp;票</div>
+		<div class="voteBtn">投&nbsp;&nbsp;票  (得票数：{{baseinfo.votes}})</div>
+		<div style="text-align:center;font-size:14px;color:#ccc">截止时间:{{timestampFormat(userinfo.vote_time)}}</div>
 		<img :src="baseinfo.project_photo" style='width:100%;margin-top:20px;'>
 	</div>
 </body>
@@ -187,7 +186,7 @@ $(".voteBtn").click(function(event) {
 	.word{
 		padding-left: 15px;
 		line-height: 28px;
-		font-size: 16px;
+		font-size: 14px;
 		color: #666;
 	}
 	.voteBtn{

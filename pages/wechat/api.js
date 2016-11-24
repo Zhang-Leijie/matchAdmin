@@ -117,6 +117,7 @@ function Vote(id){
         },
         success: function(data){
           alert(data.detail)  
+          window.location.reload()
         },
         error: function(){
              
