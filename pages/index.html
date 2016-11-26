@@ -210,6 +210,15 @@
     <div id="admin_content" class="admin_content"></div>
 </div>
 <script>
+    function setScroll(){
+        setTimeout(function(){
+            $('.admin_scrollBox').each(function(){
+                //console.log('height:' + $(this).children().height())
+                this.scrollTop = scrollDict[window.location.hash] || 0
+            })
+        }, 0)
+    }
+
     new Vue({
         el: '#logoutButton',
         data: function(){

@@ -20,7 +20,7 @@
 						<td v-if="item.isfinished == 1">查阅地址</td>
 						<td v-if="item.score != null">{{item.score}}</td>
 						<td v-else>
-							<a style="color: #419bf9" :href="'#/points-detail.html?type=raise&id=' + item.id" v-if = 'item.isfinished==2'>请输入</a>
+							<a style="color: #419bf9" @click="goToInput(item)" v-if = 'item.isfinished==2'>请输入</a>
 							<a style="color: #419bf9" :href="'#/points-detail.html?type=raise&id=' + item.id" v-else>未完成</a>
 						</td>
 					</tr>
@@ -46,6 +46,11 @@
 				uploading: false
 			}
 		},
+		methods: {
+			goToInput: function(item){
+				window.location.href = '#/points-detail.html?type=raise&id=' + item.id
+			}
+		},
 		ready: function(){
 			var self = this
 			ajaxP('/MatchAdmin/index/ScoreList', {
@@ -55,6 +60,7 @@
 					item.score_ = ""
 				})
 				self.list = res
+				setScroll()
 			})
 		}
 	})

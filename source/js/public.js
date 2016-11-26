@@ -182,7 +182,14 @@ function uiComponentEventBind(){
         var keyword = $("#search").val();
         var tbody = $(".admin_ui_table>tbody");
     })
+
+    $(".admin_scrollBox").on('scroll', function(e) {
+        scrollDict[window.location.hash] = this.scrollTop
+    })
 }
+
+var scrollDict = {}
+
 function windowReset(){
 	var h =  $(window).height()-$(ADMIN_CONFIG.headerSelector).height();
     $(ADMIN_CONFIG.contentSelector).height(h);
