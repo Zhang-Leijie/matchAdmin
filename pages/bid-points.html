@@ -39,7 +39,9 @@
 		ready: function(){
 			var $vm = this
 			// http://www.showdoc.cc/4749?page_id=61710
-			ajaxP('/index.php/MatchAdmin/index/ScoreList?type=6').then(function(res){
+			ajaxP('/index.php/MatchAdmin/index/ScoreList',{
+				type:6
+			}).then(function(res){
 				$vm.list = res
 			})
 		}

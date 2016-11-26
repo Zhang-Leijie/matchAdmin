@@ -25,7 +25,7 @@
 						<td v-if="item.score != null"><span v-if="item.isfinished==2">{{item.score}}</span></td>
 						<td v-else>
 							<a style="color:#419bf9" :href="'#/points-detail.html?type=item&id=' + item.id" v-if="item.isfinished==2">请输入</a>
-							<div v-else>未完成</div>
+							<a style="color:#419bf9" :href="'#/points-detail.html?type=item&id=' + item.id" v-else>未完成</a>
 						</td>
 					</tr>
 				</tbody>

@@ -3,7 +3,7 @@
 		<div class="admin_scrollBox">
 			<div class="admin_ui_header">
 				<i class="fa fa-shopping-bag fa-2x admin_ui_mainColor"></i>
-				<span class="maintitle">编辑项目设计</span>
+				<span class="maintitle">编辑股权众筹</span>
 			</div>
 			<div class="admin_ui_cont">
 				<div class="admin_ui_border admin_ui_cont">
@@ -54,25 +54,6 @@
 <script>
 var ret = uploadFactory('img_upload')
 
-var editor = new tinymce.Editor('tinymce', {
-	selector: '#tinymce',
-	language: 'zh_CN',
-	plugins: ['image'],
-	file_browser_callback: ret.callback,
-	height: 400
-}, tinymce.EditorManager)
-
-var editor2 = new tinymce.Editor('tinymce2', {
-	selector: '#tinymce2',
-	language: 'zh_CN',
-	plugins: ['image'],
-	file_browser_callback: ret.callback,
-	height: 400
-}, tinymce.EditorManager)
-
-editor.render();
-editor2.render();
-
 var id = getQueryVariable('id')
 if (!id) {
 	id=null
@@ -118,6 +99,26 @@ new Vue({
     },
 	ready: function(){
 		var self = this
+
+		var editor = new tinymce.Editor('tinymce', {
+			selector: '#tinymce',
+			language: 'zh_CN',
+			plugins: ['image'],
+			file_browser_callback: ret.callback,
+			height: 400
+		}, tinymce.EditorManager)
+
+		var editor2 = new tinymce.Editor('tinymce2', {
+			selector: '#tinymce2',
+			language: 'zh_CN',
+			plugins: ['image'],
+			file_browser_callback: ret.callback,
+			height: 400
+		}, tinymce.EditorManager)
+
+		editor.render();
+		editor2.render();
+
 		if (id) {
 			ajaxP('/MatchAdmin/index/DesignInfo', {
 				'id':id
@@ -126,8 +127,8 @@ new Vue({
 				self.name = res.name
 				editor.render()
 				editor2.render()
-				editor.setContent(unescapeHTML(res.background))
-				editor2.setContent(unescapeHTML(res.detail))			
+				editor.setContent(res.background)
+				editor2.setContent(res.detail)			
 			})
 		}
 	}

@@ -144,7 +144,7 @@ var createCanvas = function(schoolname, playername, teachername, month, day, rew
     var img = new Image();
     var seal = new Image();
     seal.src = "../source/images/printReward.jpg";
-    var place = [{ pic: "../source/images/printReward.jpg", schoolname: [520, 640], month: [1323, 1065], day: [1422, 1065], playername: [520, 735], teachername: [520, 830], reward:[515,540], code:[1053,1150]}];
+    var place = [{ pic: "../source/images/printReward.jpg", schoolname: [520, 640], month: [1313, 1065], day: [1412, 1065], playername: [520, 735], teachername: [520, 830], reward:[515,540], code:[1373,1110]}];
     img.src = place[0].pic;
     img.onload = function() {
         var textFont = fontText(name, 11);
@@ -157,7 +157,8 @@ var createCanvas = function(schoolname, playername, teachername, month, day, rew
         cxt.fillText(teachername, place[0].teachername[0], place[0].teachername[1]);
         cxt.fillText(month, place[0].month[0], place[0].month[1]);
         cxt.fillText(day, place[0].day[0], place[0].day[1]);
-        cxt.fillText(reward, place[0].reward[0], place[0].reward[1]);
+        cxt.fillText(reward, place[0].reward[0], place[0].reward[1]);       
+        cxt.font = "2.5rem SimSun";
         cxt.fillText(code, place[0].code[0], place[0].code[1]);
         $.ajax({
             url: "/home/asist/photo_upload",
