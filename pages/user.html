@@ -10,6 +10,7 @@
 					<tr>
 						<th>名次</th>
 						<th>队伍名称</th>
+						<th>队伍编号</th>
 						<th>学校</th>
 						<th>总分</th>
 						<th>队伍信息</th>
@@ -19,6 +20,7 @@
 					<tr v-for="list in lists">
 						<td>{{$index+1}}</td>
 						<td>{{list.account}}</td>
+						<td>{{list.number}}</td>
 						<td>{{list.school_name}}</td>
 						<td>{{list.totalscore}}</td>
 						<td>
